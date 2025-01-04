@@ -16,12 +16,17 @@ public class TeleOp extends LinearOpMode {
     private DcMotor rightLift = null;
     private DcMotor leftLift = null;
 
-   /* private CRServo hlLift = null;
+   // private CRServo leftClaw = null;
+    //private CRServo rightClaw = null;
+
+    //private CRServo Claw = null;
+
+    private CRServo hlLift = null;
     private CRServo hrLift = null;
 
-    private CRServo Claw = null;
+    private Servo Claw = null;
 
-    */
+
 
     private static double MOTOR_ADJUST = 0.75;
 
@@ -39,8 +44,13 @@ public class TeleOp extends LinearOpMode {
         rightLift = hardwareMap.get(DcMotor.class, "rightLift");
         leftLift = hardwareMap.get(DcMotor.class, "leftLift");
 
-       // hrLift = hardwareMap.get(CRServo.class, "hrLift");
-       // hlLift = hardwareMap.get(CRServo.class, "hlLift");
+        //leftClaw = hardwareMap.get(CRServo.class, "rClaw");
+        //rightClaw = hardwareMap.get(CRServo.class, "lClaw");
+
+        Claw = hardwareMap.get(Servo.class,"Claw");
+
+        hrLift = hardwareMap.get(CRServo.class, "hrLift");
+        hlLift = hardwareMap.get(CRServo.class, "hlLift");
 
         //Claw = hardwareMap.get(CRServo.class, "Claw");
 
@@ -49,12 +59,15 @@ public class TeleOp extends LinearOpMode {
         leftLower.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightLower.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         rightUpper.setDirection(DcMotorSimple.Direction.FORWARD);
         rightLower.setDirection(DcMotorSimple.Direction.FORWARD);
         leftLower.setDirection(DcMotorSimple.Direction.REVERSE);
         leftUpper.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+       /* rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -63,6 +76,8 @@ public class TeleOp extends LinearOpMode {
         leftLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        */
 
         rightLift.setDirection((DcMotorSimple.Direction.REVERSE));
         leftLift.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -107,26 +122,22 @@ public class TeleOp extends LinearOpMode {
             }
 
             if (gamepad2.dpad_up) {
-                rightLift.setTargetPosition(rightLift.getCurrentPosition() + 80);
-                leftLift.setTargetPosition(rightLift.getCurrentPosition() + 80);
                 rightLift.setPower(1);
                 leftLift.setPower(1);
             }else if (gamepad2.dpad_down) {
-                rightLift.setTargetPosition(rightLift.getCurrentPosition() - 80);
-                leftLift.setTargetPosition(rightLift.getCurrentPosition() - 80);
-                rightLift.setPower(1);
-                leftLift.setPower(1);
+                rightLift.setPower(-1);
+                leftLift.setPower(-1);
             }else{
                 rightLift.setPower(0);
                 leftLift.setPower(0);
             }
 
-           /* if(gamepad2.a){
+            if(gamepad2.right_bumper){
                 hrLift.setPower(1);
                 hlLift.setPower(1);
                 sleep(50);
             }
-            else if (gamepad2.b){
+            else if (gamepad2.left_bumper){
                 hrLift.setPower(-1);
                 hlLift.setPower(-1);
                 sleep(50);
@@ -136,21 +147,29 @@ public class TeleOp extends LinearOpMode {
                 hlLift.setPower(0);
             }
 
-
-
-            if(gamepad2.right_bumper){
-                Claw.setPower(1);
+           /* if (gamepad2.a){
+                rightClaw.setPower(0.6);
+                leftClaw.setPower(-0.6);
                 sleep(50);
-            }
-            else if(gamepad2.left_bumper){
-                Claw.setPower(-1);
-                sleep(50);
-            }
-            else{
-                Claw.setPower(0);
+            }else if (gamepad2.b){
+                rightClaw.setPower(-0.6);
+                leftClaw.setPower(0.6);
+                sleep(0);
+            }else{
+                rightClaw.setPower(0);
+                leftClaw.setPower(0);
             }
 
             */
+
+            if(gamepad2.a && Claw.getPosition() < 0.8){
+                Claw.setPosition(Claw.getPosition()+ 0.005);
+            } else if (gamepad2.b){
+                Claw.setPosition(Claw.getPosition()- 0.005);
+            }
+
+
+
             //drive movements - joystick
             //speed adjustments - gamepad1: a, b, and y
 
@@ -158,8 +177,8 @@ public class TeleOp extends LinearOpMode {
             //moving lift out - gamepad1: a and moving lift in gamepad1: b
             //opening claw - gamepad2: right_bumper and closing claw - gamepad2: left_bumper
 
-            telemetry.addData("Right Lift Ticks", rightLift.getCurrentPosition());
-            telemetry.addData("Left Lift Ticks", leftLift.getCurrentPosition());
+
+            telemetry.addData("Claw",Claw.getPosition());
             telemetry.update();
 
         }

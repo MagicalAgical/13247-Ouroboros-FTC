@@ -7,23 +7,28 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
 public class ServoTest extends LinearOpMode {
-    private CRServo Lift = null;
+    private CRServo ClawRight = null;
+    private CRServo ClawLeft = null;
     @Override
     public void runOpMode() throws InterruptedException {
-        Lift = hardwareMap.get(CRServo.class,"LiftS");
+       ClawRight = hardwareMap.get(CRServo.class,"hrLift");
+       ClawLeft = hardwareMap.get(CRServo.class,"hlLift");
 
 
         waitForStart();
 
         while (opModeIsActive()) {
             if (gamepad1.x){
-                Lift.setPower(0.6);
+                ClawRight.setPower(0.6);
+                ClawLeft.setPower(-0.6);
                 sleep(50);
             }else if (gamepad1.y){
-                Lift.setPower(-0.6);
-                sleep(50);
+                ClawRight.setPower(-0.6);
+                ClawLeft.setPower(0.6);
+                sleep(0);
             }else{
-                Lift.setPower(0);
+                ClawRight.setPower(0);
+                ClawLeft.setPower(0);
             }
         }
     }
