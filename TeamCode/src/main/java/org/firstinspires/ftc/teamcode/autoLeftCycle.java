@@ -80,17 +80,22 @@ public class autoLeftCycle extends LinearOpMode {
                     .addDisplacementMarker(()->{
                         Claw.setPosition(0);
                     })
-                    .back(18)
+                    .back(16)
                     .addTemporalMarker(10,()->{
                         rightLift.setPower(1);
                         leftLift.setPower(-1);
                     })
+                    .waitSeconds(3.5)
+                    .lineToLinearHeading(new Pose2d(28,-23.5,Math.toRadians(-90)))
                     .waitSeconds(3)
-                    .addTemporalMarker(14.5,()->{
+                    .addTemporalMarker(13,()->{
                         rightLift.setPower(0);
                         leftLift.setPower(0);
                     })
-                    .lineToLinearHeading(new Pose2d(20,-35,Math.toRadians(-97)))
+                    .waitSeconds(1)
+                    .addTemporalMarker(14,()->{
+                        Claw.setPosition(0.27);
+                    })
                     .build();
            /* TrajectorySequence traj2 = drive.trajectorySequenceBuilder(new Pose2d())
                     .lineToLinearHeading(new Pose2d(35,10))

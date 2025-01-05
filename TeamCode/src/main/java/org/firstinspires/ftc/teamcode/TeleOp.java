@@ -163,9 +163,11 @@ public class TeleOp extends LinearOpMode {
             */
 
             if(gamepad2.a && Claw.getPosition() < 0.8){
-                Claw.setPosition(Claw.getPosition()+ 0.005);
+                Claw.setPosition(Claw.getPosition() + 0.001);
             } else if (gamepad2.b){
-                Claw.setPosition(Claw.getPosition()- 0.005);
+                Claw.setPosition(Claw.getPosition() - 0.001);
+            }else if(gamepad2.dpad_left){
+                Claw.setPosition(0.27);
             }
 
 
