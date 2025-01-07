@@ -24,7 +24,7 @@ public class TeleOp extends LinearOpMode {
     private CRServo hlLift = null;
     private CRServo hrLift = null;
 
-    private Servo Claw = null;
+    private CRServo Claw = null;
 
 
 
@@ -47,7 +47,7 @@ public class TeleOp extends LinearOpMode {
         //leftClaw = hardwareMap.get(CRServo.class, "rClaw");
         //rightClaw = hardwareMap.get(CRServo.class, "lClaw");
 
-        Claw = hardwareMap.get(Servo.class,"Claw");
+        Claw = hardwareMap.get(CRServo.class,"Claw");
 
         hrLift = hardwareMap.get(CRServo.class, "hrLift");
         hlLift = hardwareMap.get(CRServo.class, "hlLift");
@@ -100,14 +100,14 @@ public class TeleOp extends LinearOpMode {
             double v3 = r * Math.sin(robotAngle) + rightX;
             double v4 = r * Math.cos(robotAngle) - rightX;
 
-            v1 = (v1 * triggerPowerAdjust * -0.9) * speedAdjust;
-            v2 = (v2 * triggerPowerAdjust * -0.9) * speedAdjust;
-            v3 = (v3 * triggerPowerAdjust * -0.9) * speedAdjust;
-            v4 = (v4 * triggerPowerAdjust * -0.9) * speedAdjust;
-            leftUpper.setPower(v1 * 0.9);
-            rightUpper.setPower(v2 * 0.9);
-            leftLower.setPower(v3 * 0.9);
-            rightLower.setPower(v4 * 0.9);
+            v1 = (v1 * triggerPowerAdjust * -1) * speedAdjust;
+            v2 = (v2 * triggerPowerAdjust * -1) * speedAdjust;
+            v3 = (v3 * triggerPowerAdjust * -1) * speedAdjust;
+            v4 = (v4 * triggerPowerAdjust * -1) * speedAdjust;
+            leftUpper.setPower(v1 * 1);
+            rightUpper.setPower(v2 * 1);
+            leftLower.setPower(v3 * 1);
+            rightLower.setPower(v4 * 1);
 
             if (gamepad1.y) {
                 speedAdjust = 1;
@@ -133,13 +133,13 @@ public class TeleOp extends LinearOpMode {
             }
 
             if(gamepad2.right_bumper){
-                hrLift.setPower(1);
-                hlLift.setPower(1);
+                hrLift.setPower(0.9);
+                hlLift.setPower(0.9);
                 sleep(50);
             }
             else if (gamepad2.left_bumper){
-                hrLift.setPower(-1);
-                hlLift.setPower(-1);
+                hrLift.setPower(-0.9);
+                hlLift.setPower(-0.9);
                 sleep(50);
             }
             else{
@@ -162,12 +162,12 @@ public class TeleOp extends LinearOpMode {
 
             */
 
-            if(gamepad2.a && Claw.getPosition() < 0.8){
-                Claw.setPosition(Claw.getPosition() + 0.001);
+            if(gamepad2.a){
+                Claw.setPower(0.6);
             } else if (gamepad2.b){
-                Claw.setPosition(Claw.getPosition() - 0.001);
-            }else if(gamepad2.dpad_left){
-                Claw.setPosition(0.27);
+                Claw.setPower(-0.6);
+            }else{
+                Claw.setPower(0);
             }
 
 
@@ -180,7 +180,7 @@ public class TeleOp extends LinearOpMode {
             //opening claw - gamepad2: right_bumper and closing claw - gamepad2: left_bumper
 
 
-            telemetry.addData("Claw",Claw.getPosition());
+
             telemetry.update();
 
         }

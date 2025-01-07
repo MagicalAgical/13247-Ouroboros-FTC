@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuild
 public class autoRight extends LinearOpMode {
   private DcMotor rightLift = null;
   private DcMotor leftLift = null;
-  private Servo Claw = null;
+  private CRServo Claw = null;
 
 
     @Override
@@ -25,7 +25,7 @@ public class autoRight extends LinearOpMode {
         leftLift = hardwareMap.get(DcMotor.class,"leftLift");
 
 
-        Claw = hardwareMap.get(Servo.class, "Claw");
+        Claw = hardwareMap.get(CRServo.class, "Claw");
 
       /*  rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -52,7 +52,9 @@ public class autoRight extends LinearOpMode {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         telemetry.addLine("Ready for start Auto Right");
         telemetry.update();
-        Claw.setPosition(0.27);
+        Claw.setPower(0.6);
+        sleep(300);
+        Claw.setPower(0);
         rightLift.setPower(-0.35);
         leftLift.setPower(0.35);
         sleep(400);
@@ -61,32 +63,29 @@ public class autoRight extends LinearOpMode {
         waitForStart();
         if(opModeIsActive()) {
             TrajectorySequence traj = drive.trajectorySequenceBuilder(new Pose2d())
-                    /*  .addTemporalMarker(() -> {
-                          rightLift.setTargetPosition(-400);
-                          leftLift.setTargetPosition(400);
-                          rightLift.setPower(1);
-                          leftLift.setPower(1);
-                      })
-                     */
-                    .lineToLinearHeading(new Pose2d(20,12))
-                    .addTemporalMarker(0, () -> {
+                    .addTemporalMarker(() -> {
                         rightLift.setPower(-1);
                         leftLift.setPower(1);
                     })
+                    .lineToLinearHeading(new Pose2d(16,12))
                     .waitSeconds(3)
                     .addTemporalMarker(3.5,()->{
                         rightLift.setPower(0);
                         leftLift.setPower(0);
                     })
-                    .lineToLinearHeading(new Pose2d(38,12))
-                    .addTemporalMarker(6.5,()->{
+                    .lineToLinearHeading(new Pose2d(32,12))
+                    .addTemporalMarker(6,()->{
                         rightLift.setPower(1);
                         leftLift.setPower(-1);
                     })
-                    .addTemporalMarker(7.2,()->{
-                        Claw.setPosition(0);
+                    .addTemporalMarker(6.5,()->{
+                        Claw.setPower(-0.6);
                     })
                     .waitSeconds(1.5)
+                    .addTemporalMarker(7.3,()->{
+                        Claw.setPower(0);
+                    })
+
                     .addTemporalMarker(9,()->{
                         rightLift.setPower(0);
                         leftLift.setPower(0);
