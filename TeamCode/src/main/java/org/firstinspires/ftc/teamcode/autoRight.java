@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 
-@Autonomous(name = "Auto Right", group = "Autonomous")
+@Autonomous(name = "Auto Right Preload", group = "Autonomous")
 public class autoRight extends LinearOpMode {
   private DcMotor rightLift = null;
   private DcMotor leftLift = null;
@@ -67,18 +67,18 @@ public class autoRight extends LinearOpMode {
                         rightLift.setPower(-1);
                         leftLift.setPower(1);
                     })
-                    .lineToLinearHeading(new Pose2d(16,12))
+                    .lineToLinearHeading(new Pose2d(20,12))
                     .waitSeconds(3)
                     .addTemporalMarker(3.5,()->{
                         rightLift.setPower(0);
                         leftLift.setPower(0);
                     })
-                    .lineToLinearHeading(new Pose2d(32,12))
+                    .lineToLinearHeading(new Pose2d(37,12))
                     .addTemporalMarker(6,()->{
                         rightLift.setPower(1);
                         leftLift.setPower(-1);
                     })
-                    .addTemporalMarker(6.5,()->{
+                    .addTemporalMarker(6.9,()->{
                         Claw.setPower(-0.6);
                     })
                     .waitSeconds(1.5)
@@ -90,7 +90,7 @@ public class autoRight extends LinearOpMode {
                         rightLift.setPower(0);
                         leftLift.setPower(0);
                     })
-                    .back(29)
+                    .back(28)
                     .strafeRight(60)
                     .build();
            /* TrajectorySequence traj2 = drive.trajectorySequenceBuilder(new Pose2d())
@@ -103,8 +103,6 @@ public class autoRight extends LinearOpMode {
             telemetry.addData("x", poseEstimate.getX());
             telemetry.addData("y", poseEstimate.getY());
             telemetry.addData("heading", poseEstimate.getHeading());
-            telemetry.addData("Right Lift", rightLift.getCurrentPosition());
-            telemetry.addData("Left Lift", leftLift.getCurrentPosition());
             telemetry.update();
 
 

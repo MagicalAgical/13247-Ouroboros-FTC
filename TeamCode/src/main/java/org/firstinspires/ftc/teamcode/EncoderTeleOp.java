@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
-public class TeleOp extends LinearOpMode {
+public class EncoderTeleOp extends LinearOpMode {
     private DcMotor leftUpper = null;
     private DcMotor leftLower = null;
     private DcMotor rightUpper = null;
@@ -16,7 +16,7 @@ public class TeleOp extends LinearOpMode {
     private DcMotor rightLift = null;
     private DcMotor leftLift = null;
 
-   // private CRServo leftClaw = null;
+    // private CRServo leftClaw = null;
     //private CRServo rightClaw = null;
 
     //private CRServo Claw = null;
@@ -67,7 +67,7 @@ public class TeleOp extends LinearOpMode {
         leftLower.setDirection(DcMotorSimple.Direction.REVERSE);
         leftUpper.setDirection(DcMotorSimple.Direction.REVERSE);
 
-       /* rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -77,7 +77,7 @@ public class TeleOp extends LinearOpMode {
         leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        */
+
 
         rightLift.setDirection((DcMotorSimple.Direction.REVERSE));
         leftLift.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -122,51 +122,42 @@ public class TeleOp extends LinearOpMode {
             }
 
             if (gamepad2.dpad_up) {
+                rightLift.setTargetPosition(rightLift.getCurrentPosition() + 200);
+                leftLift.setTargetPosition(leftLift.getCurrentPosition() + 200);
                 rightLift.setPower(1);
                 leftLift.setPower(1);
             }else if (gamepad2.dpad_down) {
-                rightLift.setPower(-1);
-                leftLift.setPower(-1);
+                rightLift.setTargetPosition(rightLift.getCurrentPosition() - 200);
+                leftLift.setTargetPosition(leftLift.getCurrentPosition() - 200);
+                rightLift.setPower(1);
+                leftLift.setPower(1);
             }else{
                 rightLift.setPower(0);
                 leftLift.setPower(0);
             }
 
             if(gamepad2.right_bumper){
-                //hrLift.setPower(0.9);
-                hlLift.setPower(-0.9);
-                sleep(50);
-            }
-            else if (gamepad2.left_bumper){
-                //hrLift.setPower(-0.9);
+                hrLift.setPower(0.9);
                 hlLift.setPower(0.9);
                 sleep(50);
             }
+            else if (gamepad2.left_bumper){
+                hrLift.setPower(-0.9);
+                hlLift.setPower(-0.9);
+                sleep(50);
+            }
             else{
+                hrLift.setPower(0);
                 hlLift.setPower(0);
             }
 
-            /* if (gamepad2.x){
-                leftLift.setPower(1);
-                rightLift.setPower(1);
-                sleep(3000);
-            }else if (gamepad2.y){
-                leftLift.setPower(-1);
-                rightLift.setPower(-1);
-                sleep(1000);
-                Claw.setPower(-0.6);
-                sleep(200);
-                leftLift.setPower(-1);
-                rightLift.setPower(-1);
-                sleep(2000);
+            if (gamepad2.a){
+
+            }else if (gamepad2.b){
+
             }else{
-                rightLift.setPower(0);
-                leftLift.setPower(0);
-                Claw.setPower(0);
 
             }
-
-             */
 
 
 
@@ -193,12 +184,12 @@ public class TeleOp extends LinearOpMode {
 
         }
     }
-public void raiseLift(double tick){
+    public void raiseLift(double tick){
         int value = (int) tick;
         rightLift.setTargetPosition(value);
         leftLift.setTargetPosition(value);
         rightLift.setPower(0.9);
         leftLift.setPower(0.9);
-}
+    }
 
 }

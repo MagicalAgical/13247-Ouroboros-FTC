@@ -79,8 +79,8 @@ public class autoLeftHigh extends LinearOpMode {
                         rightLift.setPower(0);
                         leftLift.setPower(0);
                     })
-                    .forward(15)
-                    .addTemporalMarker(12.5,  ()->{
+                    .forward(12)
+                    .addTemporalMarker(12,  ()->{
                         Claw.setPower(1);
                     })
                     .waitSeconds(2.5)
@@ -93,7 +93,7 @@ public class autoLeftHigh extends LinearOpMode {
                         leftLift.setPower(-1);
                     })
                     .waitSeconds(4)
-                    .lineToLinearHeading(new Pose2d(10,-40))
+                    .lineToLinearHeading(new Pose2d(10,-55))
                     .addTemporalMarker(20,()->{
                         rightLift.setPower(0);
                         leftLift.setPower(0);
