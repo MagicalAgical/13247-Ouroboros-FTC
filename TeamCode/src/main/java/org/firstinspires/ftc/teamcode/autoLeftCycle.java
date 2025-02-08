@@ -58,44 +58,7 @@ public class autoLeftCycle extends LinearOpMode {
         waitForStart();
         if(opModeIsActive()) {
             TrajectorySequence traj = drive.trajectorySequenceBuilder(new Pose2d())
-                    /*  .addTemporalMarker(() -> {
-                          rightLift.setTargetPosition(-400);
-                          leftLift.setTargetPosition(400);
-                          rightLift.setPower(1);
-                          leftLift.setPower(1);
-                      })
-                     */
-                    .lineToLinearHeading(new Pose2d(28,-22,Math.toRadians(45)))
-                    .addTemporalMarker(2.5,()->{
-                        rightLift.setPower(-1);
-                        leftLift.setPower(1);
-                    })
-                    .waitSeconds(5)
-                    .addTemporalMarker(7,()->{
-                        rightLift.setPower(0);
-                        leftLift.setPower(0);
-                    })
-                    .forward(14)
-                    .waitSeconds(0.7)
-                    .addDisplacementMarker(()->{
-                        Claw.setPosition(0);
-                    })
-                    .back(16)
-                    .addTemporalMarker(10,()->{
-                        rightLift.setPower(1);
-                        leftLift.setPower(-1);
-                    })
-                    .waitSeconds(3.5)
-                    .lineToLinearHeading(new Pose2d(28,-23.5,Math.toRadians(-90)))
-                    .waitSeconds(3)
-                    .addTemporalMarker(13,()->{
-                        rightLift.setPower(0);
-                        leftLift.setPower(0);
-                    })
-                    .waitSeconds(1)
-                    .addTemporalMarker(14,()->{
-                        Claw.setPosition(0.27);
-                    })
+
                     .build();
            /* TrajectorySequence traj2 = drive.trajectorySequenceBuilder(new Pose2d())
                     .lineToLinearHeading(new Pose2d(35,10))

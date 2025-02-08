@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-@Autonomous(name = "Auto Left High", group = "Autonomous")
-public class autoLeftHigh extends LinearOpMode {
+@Autonomous(name = "Auto Left Low", group = "Autonomous")
+public class autoLeftLow extends LinearOpMode {
     private DcMotor rightLift = null;
     private DcMotor leftLift = null;
     private CRServo Claw = null;
@@ -50,6 +50,14 @@ public class autoLeftHigh extends LinearOpMode {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         telemetry.addLine("Ready for start Auto Left");
         telemetry.update();
+        Claw.setPower(1);
+        sleep(200);
+        Claw.setPower(0);
+        rightLift.setPower(-0.35);
+        leftLift.setPower(0.35);
+        sleep(400);
+        rightLift.setPower(0);
+        leftLift.setPower(0);//close
         waitForStart();
         if(opModeIsActive()) {
             TrajectorySequence traj = drive.trajectorySequenceBuilder(new Pose2d())

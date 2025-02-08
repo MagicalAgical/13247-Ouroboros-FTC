@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
-public class EncoderTeleOp extends LinearOpMode {
+public class PowerTeleOp extends LinearOpMode {
     private DcMotor leftUpper = null;
     private DcMotor leftLower = null;
     private DcMotor rightUpper = null;
@@ -17,11 +17,6 @@ public class EncoderTeleOp extends LinearOpMode {
     private DcMotor leftLift = null;
 
     private CRServo intake = null;
-
-    // private CRServo leftClaw = null;
-    //private CRServo rightClaw = null;
-
-    //private CRServo Claw = null;
 
     private CRServo hlLift = null;
 
@@ -64,6 +59,7 @@ public class EncoderTeleOp extends LinearOpMode {
         leftLower.setDirection(DcMotorSimple.Direction.REVERSE);
         leftUpper.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        /*
         rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -74,15 +70,12 @@ public class EncoderTeleOp extends LinearOpMode {
         leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+         */
+
 
 
         rightLift.setDirection((DcMotorSimple.Direction.REVERSE));
         leftLift.setDirection(DcMotorSimple.Direction.REVERSE);
-
-
-        rightLift.setTargetPosition(0);
-        leftLift.setTargetPosition(0);
-
 
         waitForStart();
         double triggerPowerAdjust = 1;
@@ -119,15 +112,11 @@ public class EncoderTeleOp extends LinearOpMode {
             }
 
             if (gamepad2.dpad_up) {
-                rightLift.setTargetPosition(rightLift.getCurrentPosition() + 30);
-                leftLift.setTargetPosition(leftLift.getCurrentPosition() + 30);
-                rightLift.setPower(1);
-                leftLift.setPower(1);
+                rightLift.setPower(0.8);
+                leftLift.setPower(0.8);
             }else if (gamepad2.dpad_down) {
-                rightLift.setTargetPosition(rightLift.getCurrentPosition() - 30);
-                leftLift.setTargetPosition(leftLift.getCurrentPosition() - 30);
-                rightLift.setPower(1);
-                leftLift.setPower(1);
+                rightLift.setPower(-0.8);
+                leftLift.setPower(-0.8);
             }else{
                 rightLift.setPower(0);
                 leftLift.setPower(0);
@@ -144,7 +133,7 @@ public class EncoderTeleOp extends LinearOpMode {
             }
 
             if(gamepad2.a){
-                Claw.setPosition(1);
+                Claw.setPosition(0.9);
                 //find position for complete close and open
                 //add lift to raise up
             } else if (gamepad2.b){
@@ -170,11 +159,7 @@ public class EncoderTeleOp extends LinearOpMode {
             //hang - gamepad1 - dpad up and down for up and down
 
 
-            telemetry.addData("Right",rightLift.getCurrentPosition());
-            telemetry.addData("Left",leftLift.getCurrentPosition());
-            telemetry.addData("claw", Claw.getPosition());
-
-
+            telemetry.addData("Claw",Claw.getPosition());
             telemetry.update();
 
         }

@@ -4,10 +4,15 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
-public class EncoderTeleOp extends LinearOpMode {
+public class RedTeleOp extends LinearOpMode {
+    OpenCvCamera webcam;
     private DcMotor leftUpper = null;
     private DcMotor leftLower = null;
     private DcMotor rightUpper = null;
@@ -16,16 +21,15 @@ public class EncoderTeleOp extends LinearOpMode {
     private DcMotor rightLift = null;
     private DcMotor leftLift = null;
 
-    private CRServo intake = null;
-
     // private CRServo leftClaw = null;
     //private CRServo rightClaw = null;
 
     //private CRServo Claw = null;
 
     private CRServo hlLift = null;
+    private CRServo hrLift = null;
 
-    private Servo Claw = null;
+    private CRServo Claw = null;
 
 
 
@@ -33,6 +37,29 @@ public class EncoderTeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+                "cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(
+                hardwareMap.get(WebcamName.class, "cam"), cameraMonitorViewId);
+
+        // Set the OpenCV pipeline
+        ColorDetectionPipeline pipeline = new ColorDetectionPipeline();
+        webcam.setPipeline(pipeline);
+
+        // Open the camera asynchronously
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode) {
+                telemetry.addData("Camera Error", "Error Code: " + errorCode);
+                telemetry.update();
+            }
+        });
+
         double drive = 0;
         double strafe = 0;
         double turn = 0;
@@ -45,11 +72,15 @@ public class EncoderTeleOp extends LinearOpMode {
         rightLift = hardwareMap.get(DcMotor.class, "rightLift");
         leftLift = hardwareMap.get(DcMotor.class, "leftLift");
 
-        Claw = hardwareMap.get(Servo.class,"Claw");
-        intake = hardwareMap.get(CRServo.class, "intake");
+        //leftClaw = hardwareMap.get(CRServo.class, "rClaw");
+        //rightClaw = hardwareMap.get(CRServo.class, "lClaw");
 
+        Claw = hardwareMap.get(CRServo.class,"Claw");
 
-        hlLift = hardwareMap.get(CRServo.class, "hl");
+        hrLift = hardwareMap.get(CRServo.class, "hrLift");
+        hlLift = hardwareMap.get(CRServo.class, "hlLift");
+
+        //Claw = hardwareMap.get(CRServo.class, "Claw");
 
         leftUpper.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightUpper.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -59,10 +90,10 @@ public class EncoderTeleOp extends LinearOpMode {
         rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        rightUpper.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightLower.setDirection(DcMotorSimple.Direction.FORWARD);
-        leftLower.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftUpper.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightUpper.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightLower.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftLower.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftUpper.setDirection(DcMotorSimple.Direction.FORWARD);
 
         rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -83,12 +114,13 @@ public class EncoderTeleOp extends LinearOpMode {
         rightLift.setTargetPosition(0);
         leftLift.setTargetPosition(0);
 
-
+        telemetry.addLine("Waiting for start");
+        telemetry.update();
         waitForStart();
         double triggerPowerAdjust = 1;
         double speedAdjust = 1;
-
         while (opModeIsActive()) {
+            // Check color detection
             double r = Math.hypot(-gamepad1.left_stick_x, gamepad1.left_stick_y);
             double robotAngle = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x) - Math.PI / 4;
             double rightX = -gamepad1.right_stick_x * 0.5;
@@ -134,56 +166,45 @@ public class EncoderTeleOp extends LinearOpMode {
             }
 
             if(gamepad2.right_bumper){
-                hlLift.setPower(-1);
+                hlLift.setPower(-0.9);
+                sleep(50);
             }
             else if (gamepad2.left_bumper){
-                hlLift.setPower(1);
+                hlLift.setPower(0.9);
+                sleep(50);
             }
             else{
                 hlLift.setPower(0);
             }
+            if (pipeline.isRedDetected() || pipeline.isYellowDetected()) {
+                telemetry.addLine("Good Color detected");
+                if (gamepad2.a) {
 
-            if(gamepad2.a){
-                Claw.setPosition(1);
-                //find position for complete close and open
-                //add lift to raise up
-            } else if (gamepad2.b){
-                Claw.setPosition(0);
+
+                }
             }
 
-            if(gamepad2.right_trigger > 0.5){
-                intake.setPower(0.35);
-            }else if (gamepad2.left_trigger > 0.5){
-                intake.setPower(-0.35);
-            }else {
-                intake.setPower(0);
+            if (pipeline.isBlueDetected()) {
+                telemetry.addLine("Blue detected");
+                if (gamepad1.b) {
+
+
+                }
             }
 
+            if (pipeline.isYellowDetected()) {
+                telemetry.addLine("Yellow detected");
+            }
 
-
-            //drive movements - joystick
-            //speed adjustments - gamepad1: a, b, and y
-
-            //moving lift up - gamepad2: dpad up and moving lift down - gamepad2: dpad down
-            //moving lift out - gamepad2: r bump and moving lift in gamepad2: left bumb
-            //opening claw - gamepad2: a and closing claw - gamepad2: b
-            //hang - gamepad1 - dpad up and down for up and down
-
-
-            telemetry.addData("Right",rightLift.getCurrentPosition());
-            telemetry.addData("Left",leftLift.getCurrentPosition());
-            telemetry.addData("claw", Claw.getPosition());
-
-
+            if (pipeline.isRedDetected()) {
+                telemetry.addLine("Red detected");
+            }
+            telemetry.addData("Right Lift",rightLift.getCurrentPosition());
+            telemetry.addData("Left Lift",leftLift.getCurrentPosition());
             telemetry.update();
-
         }
-    }
-    public void raiseLift(int value){
-        rightLift.setTargetPosition(value);
-        leftLift.setTargetPosition(value);
-        rightLift.setPower(0.9);
-        leftLift.setPower(0.9);
-    }
 
+        // Stop the camera when the op mode stops
+        webcam.stopStreaming();
+    }
 }
