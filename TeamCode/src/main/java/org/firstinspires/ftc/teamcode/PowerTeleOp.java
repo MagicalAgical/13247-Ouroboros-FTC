@@ -1,10 +1,15 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
 public class PowerTeleOp extends LinearOpMode {
@@ -22,9 +27,16 @@ public class PowerTeleOp extends LinearOpMode {
 
     private Servo Claw = null;
 
+    private RevBlinkinLedDriver light;
+    private TouchSensor touch;
+    private DistanceSensor sensor;
+    private boolean distanceMode = false;
+
 
 
     private static double MOTOR_ADJUST = 0.75;
+
+
 
     @Override
     public void runOpMode() {
@@ -41,10 +53,16 @@ public class PowerTeleOp extends LinearOpMode {
         leftLift = hardwareMap.get(DcMotor.class, "leftLift");
 
         Claw = hardwareMap.get(Servo.class,"Claw");
-        intake = hardwareMap.get(CRServo.class, "intake");
+       // intake = hardwareMap.get(CRServo.class, "intake");
 
 
         hlLift = hardwareMap.get(CRServo.class, "hl");
+
+        light = hardwareMap.get(RevBlinkinLedDriver.class, "light");
+        sensor = hardwareMap.get(DistanceSensor.class, "sensor");
+
+
+        light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
 
         leftUpper.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightUpper.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -111,16 +129,72 @@ public class PowerTeleOp extends LinearOpMode {
                 speedAdjust = 0.50;
             }
 
-            if (gamepad2.dpad_up) {
-                rightLift.setPower(0.8);
-                leftLift.setPower(0.8);
-            }else if (gamepad2.dpad_down) {
-                rightLift.setPower(-0.8);
-                leftLift.setPower(-0.8);
-            }else{
+
+            if (gamepad1.right_bumper) {
+                distanceMode = true;
+            } else if (gamepad2.left_bumper) {
+                distanceMode = false;
+                light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE);
+            }
+
+            if (distanceMode) {
+                double distance = sensor.getDistance(DistanceUnit.CM);
+                double target = 10;
+
+                if(gamepad1.dpad_up){
+                    target = 30;
+                }else if(gamepad1.dpad_down){
+                    target = 40;
+                }
+                if (distance > target) {
+                    light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+                    telemetry.addData("Met desired distance", "Blue");
+                } else {
+                    light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                    telemetry.addData("Not at desired distance ", "Red");
+                }
+                telemetry.addData("Mode", "Distance-based");
+                //telemetry.addData("Distance (cm)", distance);
+            } else {
+                telemetry.addData("Color", "Rainbow");
+            }
+
+            double motor_power = 0.8;
+
+            if (gamepad2.left_stick_y > 0.3) {
+                rightLift.setPower((motor_power));
+                leftLift.setPower((motor_power));
+            }
+            else if (gamepad2.left_stick_y < -0.3) {
+                rightLift.setPower((-motor_power));
+                leftLift.setPower((-motor_power));
+            }
+            else {
+                rightLift.setPower((0));
+                leftLift.setPower((0));
+            }
+
+            if (gamepad2.dpad_down) {
+                motor_power -= 0.1;
+            }
+            else if (gamepad2.dpad_up) {
+                motor_power =+ 0.1;
+            }else {
+                motor_power = 0.8;
+            }
+
+           /* if(gamepad2.x){
+                rightLift.setPower(0.35);
+                leftLift.setPower(0.35);
+            } else if (gamepad2.y) {
+                rightLift.setPower(-0.35);
+                leftLift.setPower(-0.35);
+            }else {
                 rightLift.setPower(0);
                 leftLift.setPower(0);
             }
+
+            */
 
             if(gamepad2.right_bumper){
                 hlLift.setPower(-1);
@@ -140,13 +214,15 @@ public class PowerTeleOp extends LinearOpMode {
                 Claw.setPosition(0);
             }
 
-            if(gamepad2.right_trigger > 0.5){
+          /*  if(gamepad2.right_trigger > 0.5){
                 intake.setPower(0.35);
             }else if (gamepad2.left_trigger > 0.5){
                 intake.setPower(-0.35);
             }else {
                 intake.setPower(0);
             }
+
+           */
 
 
 

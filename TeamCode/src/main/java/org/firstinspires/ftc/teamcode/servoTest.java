@@ -1,88 +1,58 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
-@TeleOp
-public class servoTest extends LinearOpMode {
-    private CRServo intake;
-    private CRServo hrLift;
-   // private DcMotor rightLift = null;
-   // private DcMotor leftLift = null;
+import android.text.method.Touch;
+
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.TouchSensor;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "LED Distance Sensor")
+public class servoTest extends OpMode {
+
+    private RevBlinkinLedDriver light;
+    private TouchSensor touch;
+    private DistanceSensor sensor;
+    private boolean distanceMode = false;
+
+
     @Override
-    public void runOpMode() throws InterruptedException {
-        intake = hardwareMap.get(CRServo.class,"wheel");
-     /*   leftLift = hardwareMap.get(DcMotor.class,"leftLift");
-        rightLift = hardwareMap.get(DcMotor.class,"rightLift");
-        rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightLift.setDirection((DcMotorSimple.Direction.REVERSE));
-        leftLift.setDirection(DcMotorSimple.Direction.REVERSE);
-
-      */
+    public void init() {
+        light = hardwareMap.get(RevBlinkinLedDriver.class, "light");
+       sensor = hardwareMap.get(DistanceSensor.class, "sensor");
 
 
+        light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+    }
 
-      //  hrLift = hardwareMap.get(CRServo.class,"hrLift");
-
-       // intake = hardwareMap.get(Servo.class, "wheel");
-       // double position = intake.getPosition();
-
-        waitForStart();
-
-        while (opModeIsActive()) {
-         /*   if (gamepad1.right_trigger > 0.1) {
-                position = Math.min(1.0, position + 0.01);
-            } else if (gamepad1.left_trigger > 0.1) {
-                position = Math.max(0.0, position - 0.01);
-            }
-
-            intake.setPosition(position);
-            telemetry.addData("Servo Position", position);
-            telemetry.update();
-
-          */
-
-
-           if(gamepad1.a){
-                intake.setPower(0.4);
-            }else if(gamepad1.b){
-                intake.setPower(-0.4);
-            }else{
-               intake.setPower(0);
-           }
-
-
-
-            /*  if(gamepad1.x){
-               hrLift.setPower(0.5);
-           }else if (gamepad1.y){
-               hrLift.setPower(-0.5);
-           }else{
-               hrLift.setPower(0);
-           }
-
-          */
-
-
-
-           /* if(gamepad1.dpad_up){
-                rightLift.setPower(1);
-                leftLift.setPower(1);
-            } else if (gamepad1.dpad_down) {
-                rightLift.setPower(-1);
-                leftLift.setPower(-1);
-            }else{
-                rightLift.setPower(0);
-                leftLift.setPower(0);
-            }
-
-            */
-
-
+    @Override
+    public void loop() {
+        if (gamepad1.a) {
+            distanceMode = true;
+        } else if (gamepad1.b) {
+            distanceMode = false;
+            light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE);
         }
+
+        if (distanceMode) {
+            double distance = sensor.getDistance(DistanceUnit.CM);
+
+            if (distance > 10) {
+                light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+                telemetry.addData("Mode", "Blue");
+            } else {
+                light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+                telemetry.addData("Mode", "Red");
+            }
+            telemetry.addData("Mode", "Distance-based");
+            //telemetry.addData("Distance (cm)", distance);
+        } else {
+            telemetry.addData("Mode", "Rainbow");
+        }
+
+
+        telemetry.update();
     }
 }
