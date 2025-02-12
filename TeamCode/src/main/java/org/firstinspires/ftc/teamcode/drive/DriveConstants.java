@@ -21,8 +21,8 @@ public class DriveConstants {
     /*
      * These are motor constants that should be listed online for your motors.
      */
-    public static final double TICKS_PER_REV = 145.6;
-    public static final double MAX_RPM = 1150;
+    public static final double TICKS_PER_REV = 537.7;
+    public static final double MAX_RPM = 312;
 
     /*
      * Set RUN_USING_ENCODER to true to enable built-in hub velocity control using drive encoders.
@@ -45,8 +45,8 @@ public class DriveConstants {
      * convenience. Make sure to exclude any gear ratio included in MOTOR_CONFIG from GEAR_RATIO.
      */
     public static double WHEEL_RADIUS = 1.8; // in
-    public static double GEAR_RATIO = 1.25; // output (wheel) speed / input (motor) speed
-    public static double TRACK_WIDTH = 18.1; // in
+    public static double GEAR_RATIO = 1.1; // output (wheel) speed / input (motor) speed
+    public static double TRACK_WIDTH = 12.3; // in
 
     /*
      * These are the feedforward parameters used to model the drive motor behavior. If you are using
@@ -54,8 +54,8 @@ public class DriveConstants {
      * motor encoders or have elected not to use them for velocity control, these values should be
      * empirically tuned.
      */
-    public static double kV = 0.011;
-    public static double kA = 0.0052;
+    public static double kV = 0.028;
+    public static double kA = 0.005;
     public static double kStatic = 0;
 
     /*
@@ -65,10 +65,10 @@ public class DriveConstants {
      * small and gradually increase them later after everything is working. All distance units are
      * inches.
      */
-    public static double MAX_VEL = 60;
-    public static double MAX_ACCEL = 60;
-    public static double MAX_ANG_VEL = Math.toRadians(130);
-    public static double MAX_ANG_ACCEL = Math.toRadians(130);
+    public static double MAX_VEL = 23;
+    public static double MAX_ACCEL = 23;
+    public static double MAX_ANG_VEL = Math.toRadians(105);
+    public static double MAX_ANG_ACCEL = Math.toRadians(105);
 
     /*
      * Adjust the orientations here to match your robot. See the FTC SDK documentation for details.
@@ -76,7 +76,7 @@ public class DriveConstants {
     public static RevHubOrientationOnRobot.LogoFacingDirection LOGO_FACING_DIR =
             RevHubOrientationOnRobot.LogoFacingDirection.UP;
     public static RevHubOrientationOnRobot.UsbFacingDirection USB_FACING_DIR =
-            RevHubOrientationOnRobot.UsbFacingDirection.LEFT;
+            RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
 
 
     public static double encoderTicksToInches(double ticks) {

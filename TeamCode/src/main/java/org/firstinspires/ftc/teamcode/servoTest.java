@@ -12,19 +12,19 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "LED Distance Sensor")
 public class servoTest extends OpMode {
 
-    private RevBlinkinLedDriver light;
-    private TouchSensor touch;
+   // private RevBlinkinLedDriver light;
+   // private TouchSensor touch;
     private DistanceSensor sensor;
     private boolean distanceMode = false;
 
 
     @Override
     public void init() {
-        light = hardwareMap.get(RevBlinkinLedDriver.class, "light");
+      //  light = hardwareMap.get(RevBlinkinLedDriver.class, "light");
        sensor = hardwareMap.get(DistanceSensor.class, "sensor");
 
 
-        light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+       // light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
     }
 
     @Override
@@ -33,17 +33,17 @@ public class servoTest extends OpMode {
             distanceMode = true;
         } else if (gamepad1.b) {
             distanceMode = false;
-            light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE);
+            //light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE);
         }
 
         if (distanceMode) {
             double distance = sensor.getDistance(DistanceUnit.CM);
 
             if (distance > 10) {
-                light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+                //light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
                 telemetry.addData("Mode", "Blue");
             } else {
-                light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+               // light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
                 telemetry.addData("Mode", "Red");
             }
             telemetry.addData("Mode", "Distance-based");

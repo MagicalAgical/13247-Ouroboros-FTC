@@ -34,8 +34,8 @@ public class autoLeftCycle extends LinearOpMode {
         leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
        */
-        rightLift.setDirection((DcMotorSimple.Direction.FORWARD));
-        leftLift.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightLift.setDirection((DcMotorSimple.Direction.REVERSE));
+        leftLift.setDirection(DcMotorSimple.Direction.REVERSE);
 
         rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -49,12 +49,7 @@ public class autoLeftCycle extends LinearOpMode {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         telemetry.addLine("Ready for start Auto Left");
         telemetry.update();
-        Claw.setPosition(0.27);
-        rightLift.setPower(-0.35);
-        leftLift.setPower(0.35);
-        sleep(400);
-        rightLift.setPower(0);
-        leftLift.setPower(0);//close
+
         waitForStart();
         if(opModeIsActive()) {
             TrajectorySequence traj = drive.trajectorySequenceBuilder(new Pose2d())

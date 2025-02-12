@@ -59,10 +59,10 @@ public class EncoderTeleOp extends LinearOpMode {
         rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        rightUpper.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightLower.setDirection(DcMotorSimple.Direction.FORWARD);
-        leftLower.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftUpper.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightUpper.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightLower.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftLower.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftUpper.setDirection(DcMotorSimple.Direction.FORWARD);
 
         rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

@@ -27,10 +27,17 @@ public class PowerTeleOp extends LinearOpMode {
 
     private Servo Claw = null;
 
-    private RevBlinkinLedDriver light;
+    private DcMotor hangRight = null;
+    private DcMotor hangLeft = null;
+
+   private RevBlinkinLedDriver light;
     private TouchSensor touch;
     private DistanceSensor sensor;
     private boolean distanceMode = false;
+
+    private boolean specimenMode = false;
+
+
 
 
 
@@ -52,17 +59,18 @@ public class PowerTeleOp extends LinearOpMode {
         rightLift = hardwareMap.get(DcMotor.class, "rightLift");
         leftLift = hardwareMap.get(DcMotor.class, "leftLift");
 
+        hangLeft = hardwareMap.get(DcMotor.class,"hangL");
+        hangRight = hardwareMap.get(DcMotor.class,"hangR");
+
         Claw = hardwareMap.get(Servo.class,"Claw");
        // intake = hardwareMap.get(CRServo.class, "intake");
 
 
         hlLift = hardwareMap.get(CRServo.class, "hl");
 
-        light = hardwareMap.get(RevBlinkinLedDriver.class, "light");
+        //light = hardwareMap.get(RevBlinkinLedDriver.class, "light");
         sensor = hardwareMap.get(DistanceSensor.class, "sensor");
 
-
-        light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
 
         leftUpper.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightUpper.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -72,10 +80,10 @@ public class PowerTeleOp extends LinearOpMode {
         rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        rightUpper.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightLower.setDirection(DcMotorSimple.Direction.FORWARD);
-        leftLower.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftUpper.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightUpper.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightLower.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftLower.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftUpper.setDirection(DcMotorSimple.Direction.FORWARD);
 
         /*
         rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -90,19 +98,28 @@ public class PowerTeleOp extends LinearOpMode {
 
          */
 
-
-
         rightLift.setDirection((DcMotorSimple.Direction.REVERSE));
         leftLift.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        hangRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        hangLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
+
+
 
         waitForStart();
         double triggerPowerAdjust = 1;
         double speedAdjust = 1;
+        double motor_power = 0.8;
+        double specDist = 30;
+        double highCham = 78;
+        double highBasket = 819;
+        double lowBasket = 85;
 
         while (opModeIsActive()) {
             double r = Math.hypot(-gamepad1.left_stick_x, gamepad1.left_stick_y);
             double robotAngle = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x) - Math.PI / 4;
-            double rightX = -gamepad1.right_stick_x * 0.5;
+            double rightX = gamepad1.right_stick_x * 0.5;
             double v1 = r * Math.cos(robotAngle) + rightX;
             double v2 = r * Math.sin(robotAngle) - rightX;
             double v3 = r * Math.sin(robotAngle) + rightX;
@@ -121,67 +138,66 @@ public class PowerTeleOp extends LinearOpMode {
                 speedAdjust = 1;
             }
 
-            if (gamepad1.b) {
+            if (gamepad1.x) {
                 speedAdjust = 0.75;
             }
 
-            if (gamepad1.a) {
-                speedAdjust = 0.50;
+
+
+            // for specimen grabbing thingy
+            double distance = sensor.getDistance(DistanceUnit.CM);
+            double target = 10;
+
+            if(gamepad2.a){
+                target = highCham;
+                telemetry.addLine("High Chamber");
+            }else if(gamepad2.b){
+                target = highBasket;
+                telemetry.addLine("High Basket");
+            }else if(gamepad2.x){
+                target = lowBasket;
+                telemetry.addLine("Low Basket");
             }
-
-
-            if (gamepad1.right_bumper) {
-                distanceMode = true;
-            } else if (gamepad2.left_bumper) {
-                distanceMode = false;
-                light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE);
+            else if (gamepad2.y){
+                target = specDist;
+                telemetry.addLine("Specimen Pickup");
             }
-
-            if (distanceMode) {
-                double distance = sensor.getDistance(DistanceUnit.CM);
-                double target = 10;
-
-                if(gamepad1.dpad_up){
-                    target = 30;
-                }else if(gamepad1.dpad_down){
-                    target = 40;
-                }
-                if (distance > target) {
-                    light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
-                    telemetry.addData("Met desired distance", "Blue");
-                } else {
-                    light.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
-                    telemetry.addData("Not at desired distance ", "Red");
-                }
-                telemetry.addData("Mode", "Distance-based");
-                //telemetry.addData("Distance (cm)", distance);
+            if (distance >= target + 5 && distance <= target - 5) {
+              //light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+                telemetry.addData("Met desired distance", "Green");
             } else {
-                telemetry.addData("Color", "Rainbow");
+               //light.setPattern(RevBlinkinLedDriver.BlinkinPattern.AQUA);
+                telemetry.addData("Not at desired distance ", "Aqua");
             }
+            telemetry.addData("Mode", "Outtake Actions");
+            //telemetry.addData("Distance (cm)", distance);
 
-            double motor_power = 0.8;
+        telemetry.addData("Distance",sensor.getDistance(DistanceUnit.CM));
+
+
+            if (gamepad2.dpad_up) {
+                motor_power = 0.85;
+            } else if (gamepad2.dpad_down) {
+                motor_power = 0.45;
+            }
+            telemetry.addData("Motor Power", motor_power);
+
 
             if (gamepad2.left_stick_y > 0.3) {
-                rightLift.setPower((motor_power));
-                leftLift.setPower((motor_power));
-            }
-            else if (gamepad2.left_stick_y < -0.3) {
                 rightLift.setPower((-motor_power));
                 leftLift.setPower((-motor_power));
+            }
+            else if (gamepad2.left_stick_y < -0.3) {
+                rightLift.setPower((motor_power));
+                leftLift.setPower((motor_power));
             }
             else {
                 rightLift.setPower((0));
                 leftLift.setPower((0));
             }
 
-            if (gamepad2.dpad_down) {
-                motor_power -= 0.1;
-            }
-            else if (gamepad2.dpad_up) {
-                motor_power =+ 0.1;
-            }else {
-                motor_power = 0.8;
-            }
+
+
 
            /* if(gamepad2.x){
                 rightLift.setPower(0.35);
@@ -197,47 +213,94 @@ public class PowerTeleOp extends LinearOpMode {
             */
 
             if(gamepad2.right_bumper){
-                hlLift.setPower(-1);
+                hlLift.setPower(1);
             }
             else if (gamepad2.left_bumper){
-                hlLift.setPower(1);
+                hlLift.setPower(-1);
             }
             else{
                 hlLift.setPower(0);
             }
 
-            if(gamepad2.a){
-                Claw.setPosition(0.9);
+            if(gamepad2.right_trigger > 0.5){
+                Claw.setPosition(Claw.getPosition() + 0.05);
                 //find position for complete close and open
                 //add lift to raise up
-            } else if (gamepad2.b){
-                Claw.setPosition(0);
+            } else if (gamepad2.left_trigger > 0.5){
+                Claw.setPosition(Claw.getPosition() - 0.05);
             }
 
-          /*  if(gamepad2.right_trigger > 0.5){
-                intake.setPower(0.35);
-            }else if (gamepad2.left_trigger > 0.5){
-                intake.setPower(-0.35);
+
+            if(gamepad1.right_trigger > 0.5){
+                hangRight.setPower(1);
+                hangLeft.setPower(1);
+            }else if (gamepad1.left_trigger > 0.5){
+                hangRight.setPower(-1);
+                hangLeft.setPower(-1);
             }else {
-                intake.setPower(0);
+                hangRight.setPower(0);
+                hangLeft.setPower(0);
             }
 
-           */
 
 
 
-            //drive movements - joystick
-            //speed adjustments - gamepad1: a, b, and y
 
-            //moving lift up - gamepad2: dpad up and moving lift down - gamepad2: dpad down
-            //moving lift out - gamepad2: r bump and moving lift in gamepad2: left bumb
-            //opening claw - gamepad2: a and closing claw - gamepad2: b
-            //hang - gamepad1 - dpad up and down for up and down
+            //drive movements - joystick - gamepad 1
+
+
+            /*
+            gamepad1 stuff:
+            a - highChamber target
+            b - highBasket target
+            x - 0.75
+            y - 1
+
+            right trigger - hang up
+            left trigger - hang down
+
+            gamepad 2 stuff:
+
+            a -
+            b -
+            x -
+            y -
+
+            dpads -
+                up -
+                down -
+                left -
+                right -
+
+
+            dpads:
+                up - lift power = 0.8
+                down - lift power - 0.6
+                left -
+                right -
+
+            right bump - hor out
+            left bump - hor in
+
+            left stick up - lift up
+            left stick down - lift down
+
+            right trigger - claw open
+            left trigger - claw close
+
+
+
+
+             */
 
 
             telemetry.addData("Claw",Claw.getPosition());
             telemetry.update();
 
+        }
+
+        if (isStopRequested()){
+            light.close();
         }
     }
     public void raiseLift(int value){

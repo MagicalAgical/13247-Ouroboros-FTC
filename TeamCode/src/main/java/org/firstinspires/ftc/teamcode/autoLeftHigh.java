@@ -35,7 +35,7 @@ public class autoLeftHigh extends LinearOpMode {
         leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
        */
-        rightLift.setDirection((DcMotorSimple.Direction.FORWARD));
+        rightLift.setDirection((DcMotorSimple.Direction.REVERSE));
         leftLift.setDirection(DcMotorSimple.Direction.REVERSE);
 
         rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
