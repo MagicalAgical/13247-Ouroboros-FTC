@@ -68,7 +68,7 @@ public class PowerTeleOp extends LinearOpMode {
 
         hlLift = hardwareMap.get(CRServo.class, "hl");
 
-        //light = hardwareMap.get(RevBlinkinLedDriver.class, "light");
+        light = hardwareMap.get(RevBlinkinLedDriver.class, "light");
         sensor = hardwareMap.get(DistanceSensor.class, "sensor");
 
 
@@ -79,6 +79,9 @@ public class PowerTeleOp extends LinearOpMode {
 
         rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        hangLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        hangRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         rightUpper.setDirection(DcMotorSimple.Direction.REVERSE);
         rightLower.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -108,6 +111,7 @@ public class PowerTeleOp extends LinearOpMode {
 
 
         waitForStart();
+        light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
         double triggerPowerAdjust = 1;
         double speedAdjust = 1;
         double motor_power = 0.8;
@@ -134,45 +138,56 @@ public class PowerTeleOp extends LinearOpMode {
             leftLower.setPower(v3 * 1);
             rightLower.setPower(v4 * 1);
 
-            if (gamepad1.y) {
+            if (gamepad1.a) {
                 speedAdjust = 1;
+            }else if (gamepad1.x) {
+                speedAdjust = 0.75;
+            }else if(gamepad1.y){
+                speedAdjust = 0.5;
             }
 
-            if (gamepad1.x) {
-                speedAdjust = 0.75;
-            }
 
 
 
             // for specimen grabbing thingy
             double distance = sensor.getDistance(DistanceUnit.CM);
-            double target = 10;
+            double selectedTarget = highCham;
+            String targetName = "High Chamber"; // Default target name
 
-            if(gamepad2.a){
-                target = highCham;
-                telemetry.addLine("High Chamber");
-            }else if(gamepad2.b){
-                target = highBasket;
-                telemetry.addLine("High Basket");
-            }else if(gamepad2.x){
-                target = lowBasket;
-                telemetry.addLine("Low Basket");
+            boolean lastA = false;
+            boolean lastX = false;
+            boolean lastY = false;
+
+            if (gamepad2.a && !lastA) { // Button just pressed (not held)
+                selectedTarget = highCham;
+                targetName = "High Chamber";
             }
-            else if (gamepad2.y){
-                target = specDist;
-                telemetry.addLine("Specimen Pickup");
+            if (gamepad2.x && !lastX) {
+                selectedTarget = lowBasket;
+                targetName = "Low Basket";
             }
-            if (distance >= target + 5 && distance <= target - 5) {
-              //light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
-                telemetry.addData("Met desired distance", "Green");
+            if (gamepad2.y && !lastY) {
+                selectedTarget = specDist;
+                targetName = "Specimen Pickup";
+            }
+
+            lastA = gamepad2.a;
+            lastX = gamepad2.x;
+            lastY = gamepad2.y;
+
+
+            if (distance >= selectedTarget + 10 || distance <= selectedTarget - 10) {
+                // light.setPattern(RevBlinkinLedDriver.BlinkinPattern.AQUA);
+                telemetry.addData("Not at desired distance", "Aqua");
             } else {
-               //light.setPattern(RevBlinkinLedDriver.BlinkinPattern.AQUA);
-                telemetry.addData("Not at desired distance ", "Aqua");
+                // light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+                telemetry.addData("Met desired distance", "Green");
             }
-            telemetry.addData("Mode", "Outtake Actions");
-            //telemetry.addData("Distance (cm)", distance);
 
-        telemetry.addData("Distance",sensor.getDistance(DistanceUnit.CM));
+// Telemetry to show the current target name
+            telemetry.addData("Current Target", targetName);
+            telemetry.addData("Mode", "Outtake Actions");
+            telemetry.addData("Distance (cm)", distance);
 
 
             if (gamepad2.dpad_up) {
@@ -232,11 +247,11 @@ public class PowerTeleOp extends LinearOpMode {
 
 
             if(gamepad1.right_trigger > 0.5){
-                hangRight.setPower(1);
-                hangLeft.setPower(1);
+                hangRight.setPower(0.7);
+                hangLeft.setPower(0.7);
             }else if (gamepad1.left_trigger > 0.5){
-                hangRight.setPower(-1);
-                hangLeft.setPower(-1);
+                hangRight.setPower(-0.7);
+                hangLeft.setPower(-0.7);
             }else {
                 hangRight.setPower(0);
                 hangLeft.setPower(0);
@@ -300,7 +315,7 @@ public class PowerTeleOp extends LinearOpMode {
         }
 
         if (isStopRequested()){
-            light.close();
+            light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
         }
     }
     public void raiseLift(int value){

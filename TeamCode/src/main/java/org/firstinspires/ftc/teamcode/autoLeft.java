@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -21,6 +22,7 @@ public class autoLeft extends LinearOpMode {
     private DcMotor leftLift = null;
     private Servo Claw = null;
     private CRServo hl = null;
+    //private RevBlinkinLedDriver light;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -35,42 +37,55 @@ public class autoLeft extends LinearOpMode {
         rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+       // light = hardwareMap.get(RevBlinkinLedDriver.class,"light");
+
 
         telemetry.addLine("Ready for start Auto Left");
         telemetry.update();
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        Claw.setPosition(0.95);
+        Claw.setPosition(0.99);
         waitForStart();
         if (opModeIsActive()) {
             TrajectorySequence traj = drive.trajectorySequenceBuilder(new Pose2d())
                     .addTemporalMarker(()->{
+                        //light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+                        hl.setPower(0.75);
                         Claw.setPosition(0.95);
-                        rightLift.setPower(0.9);
-                        leftLift.setPower(0.9);
+                        rightLift.setPower(.95);
+                        leftLift.setPower(0.95);
                     })
-                    .lineToLinearHeading(new Pose2d(18,-1))
+                    .lineToLinearHeading(new Pose2d(21.5,-1.5))
                     .waitSeconds(0.2)
-                    .addTemporalMarker(1.7,()->{
+                    .addTemporalMarker(1.9,()->{
+                        hl.setPower(0);
                         rightLift.setPower(0);
                         leftLift.setPower(0);
                     })
-                    .forward(6)
+                    .forward(6.5)
                     .waitSeconds(0.5)
                     .addTemporalMarker(4.5,()->{
                         rightLift.setPower(-0.4);
                         leftLift.setPower(-0.4);
                     })
                     .waitSeconds(1)
-                    .addTemporalMarker(4.7,()->{
+                    .addTemporalMarker(4.88,()->{
+                        //light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
                         Claw.setPosition(0.3);
                         rightLift.setPower(0);
                         leftLift.setPower(0);
                     })
                     .back(3.5)
+                    .addDisplacementMarker(()->{
+                        //light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+                    })
+                    .strafeLeft(8.5)
+                    .forward(25)
+                    .turn(Math.toRadians(90))
+                    .forward(15)
                     .waitSeconds(1)
                    // .strafeLeft(18.5)
-                    .lineToLinearHeading(new Pose2d(27.5,10))
-                    .turn(Math.toRadians(12))
+                  //  .lineToLinearHeading(new Pose2d(27.5,10))
+                   // .turn(Math.toRadians(12))
                    /* .addTemporalMarker(13.5,()->{
                         rightLift.setPower(-0.6);
                         leftLift.setPower(-0.6);
@@ -88,7 +103,7 @@ public class autoLeft extends LinearOpMode {
                     */
                     .build();
 
-            TrajectorySequence traj2 = drive.trajectorySequenceBuilder(traj.end())
+         /*   TrajectorySequence traj2 = drive.trajectorySequenceBuilder(traj.end())
                     .addTemporalMarker(()->{
                         hl.setPower(0.6);
                         rightLift.setPower(-0.7);
@@ -106,7 +121,7 @@ public class autoLeft extends LinearOpMode {
                     })
                     .build();
 
-            TrajectorySequence traj3 = drive.trajectorySequenceBuilder(traj.end())
+            TrajectorySequence traj3 = drive.trajectorySequenceBuilder(traj2.end())
                     .addTemporalMarker(()->{
                         rightLift.setPower(0.7);
                         leftLift.setPower(0.7);
@@ -120,7 +135,7 @@ public class autoLeft extends LinearOpMode {
                     .turn(Math.toRadians(210))
                     .forward(5)
                     .build();
-            TrajectorySequence traj4 = drive.trajectorySequenceBuilder(traj.end())
+            TrajectorySequence traj4 = drive.trajectorySequenceBuilder(traj3.end())
                     .addTemporalMarker(()->{
                         rightLift.setPower(0.7);
                         leftLift.setPower(0.7);
@@ -131,10 +146,14 @@ public class autoLeft extends LinearOpMode {
                     })
                     .forward(2)
                             .build();
+
+          */
             drive.followTrajectorySequence(traj);
-            drive.followTrajectorySequence(traj2);// Start trajectory execution
+          /*  drive.followTrajectorySequence(traj2);// Start trajectory execution
             drive.followTrajectorySequence(traj3);
             drive.followTrajectorySequence(traj4);
+
+           */
 
 
 
