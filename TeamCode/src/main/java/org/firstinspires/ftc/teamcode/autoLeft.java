@@ -47,6 +47,7 @@ public class autoLeft extends LinearOpMode {
         waitForStart();
         if (opModeIsActive()) {
             TrajectorySequence traj = drive.trajectorySequenceBuilder(new Pose2d())
+                    .waitSeconds(2)
                     .addTemporalMarker(()->{
                         //light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
                         hl.setPower(0.75);
@@ -54,9 +55,9 @@ public class autoLeft extends LinearOpMode {
                         rightLift.setPower(.95);
                         leftLift.setPower(0.95);
                     })
-                    .lineToLinearHeading(new Pose2d(21.5,-1.5))
+                    .lineToLinearHeading(new Pose2d(21.5,-1.2))
                     .waitSeconds(0.2)
-                    .addTemporalMarker(1.9,()->{
+                    .addTemporalMarker(1.95,()->{
                         hl.setPower(0);
                         rightLift.setPower(0);
                         leftLift.setPower(0);

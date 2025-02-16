@@ -102,7 +102,7 @@ public class autoLeftCycle extends LinearOpMode {
                     .build();
 
             TrajectorySequence traj2 = drive.trajectorySequenceBuilder(traj.end())
-                    .waitSeconds(1)
+                    .waitSeconds(1.5)
                     .turn(Math.toRadians(190))
                     .addTemporalMarker(()->{
                         rightLift.setPower(0.8);
@@ -112,7 +112,7 @@ public class autoLeftCycle extends LinearOpMode {
                         rightLift.setPower(0);
                         leftLift.setPower(0);
                     })
-                    .waitSeconds(3)
+                    .waitSeconds(1)
                     .forward(10)
                     .build();
             /*
@@ -147,6 +147,8 @@ public class autoLeftCycle extends LinearOpMode {
             drive.followTrajectorySequence(traj);
             Claw.setPosition(0.99);
            drive.followTrajectorySequence(traj2);
+           rightLift.setPower(0);
+           leftLift.setPower(0);
            Claw.setPosition(0.3);// Start trajectory execution
             //drive.followTrajectorySequence(traj3);
             //drive.followTrajectorySequence(traj4);

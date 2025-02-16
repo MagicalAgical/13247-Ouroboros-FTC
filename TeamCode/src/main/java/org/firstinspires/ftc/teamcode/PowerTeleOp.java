@@ -111,12 +111,11 @@ public class PowerTeleOp extends LinearOpMode {
 
 
         waitForStart();
-        light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
         double triggerPowerAdjust = 1;
         double speedAdjust = 1;
         double motor_power = 0.8;
         double specDist = 30;
-        double highCham = 78;
+        double highCham = 56;
         double highBasket = 819;
         double lowBasket = 85;
 
@@ -151,49 +150,35 @@ public class PowerTeleOp extends LinearOpMode {
 
             // for specimen grabbing thingy
             double distance = sensor.getDistance(DistanceUnit.CM);
-            double selectedTarget = highCham;
-            String targetName = "High Chamber"; // Default target name
-
-            boolean lastA = false;
-            boolean lastX = false;
-            boolean lastY = false;
-
-            if (gamepad2.a && !lastA) { // Button just pressed (not held)
-                selectedTarget = highCham;
-                targetName = "High Chamber";
+            double target = highCham;
+            if(gamepad2.a){
+                target = highCham;
+                telemetry.addLine("High Chamber");
+            }else if(gamepad2.x){
+                target = lowBasket;
+                telemetry.addLine("Low Basket");
             }
-            if (gamepad2.x && !lastX) {
-                selectedTarget = lowBasket;
-                targetName = "Low Basket";
+            else if (gamepad2.y){
+                target = specDist;
+                telemetry.addLine("Specimen Pickup");
             }
-            if (gamepad2.y && !lastY) {
-                selectedTarget = specDist;
-                targetName = "Specimen Pickup";
-            }
-
-            lastA = gamepad2.a;
-            lastX = gamepad2.x;
-            lastY = gamepad2.y;
-
-
-            if (distance >= selectedTarget + 10 || distance <= selectedTarget - 10) {
-                // light.setPattern(RevBlinkinLedDriver.BlinkinPattern.AQUA);
-                telemetry.addData("Not at desired distance", "Aqua");
-            } else {
-                // light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            if (distance >= target) {
+                light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
                 telemetry.addData("Met desired distance", "Green");
+            } else {
+                light.setPattern(RevBlinkinLedDriver.BlinkinPattern.AQUA);
+                telemetry.addData("Not at desired distance ", "Aqua");
             }
-
-// Telemetry to show the current target name
-            telemetry.addData("Current Target", targetName);
             telemetry.addData("Mode", "Outtake Actions");
-            telemetry.addData("Distance (cm)", distance);
+            //telemetry.addData("Distance (cm)", distance);
+
+            telemetry.addData("Distance",sensor.getDistance(DistanceUnit.CM));
 
 
             if (gamepad2.dpad_up) {
-                motor_power = 0.85;
+                motor_power = 0.9;
             } else if (gamepad2.dpad_down) {
-                motor_power = 0.45;
+                motor_power = 0.48;
             }
             telemetry.addData("Motor Power", motor_power);
 

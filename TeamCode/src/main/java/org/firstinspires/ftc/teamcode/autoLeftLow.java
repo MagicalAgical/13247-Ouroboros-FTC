@@ -51,8 +51,7 @@ public class autoLeftLow extends LinearOpMode {
                     .strafeRight(2.5)
                     .forward(10)
                     .turn(Math.toRadians(-43))
-                    .strafeRight(1.3)
-                    .turn(Math.toRadians(-39))
+                    .strafeRight(2.5)
                     .addTemporalMarker(()->{
                         rightLift.setPower(0.9);
                         leftLift.setPower(0.9);
@@ -69,21 +68,12 @@ public class autoLeftLow extends LinearOpMode {
                    .forward(10)
                     .build();
 
-/*
+
             TrajectorySequence traj3 = drive.trajectorySequenceBuilder(traj2.end())
-                    .addTemporalMarker(()->{
-                        rightLift.setPower(0.7);
-                        leftLift.setPower(0.7);
-                    })
-                    .addTemporalMarker(1,()->{
-                        rightLift.setPower(0);
-                        leftLift.setPower(0);
-                    })
-                    .waitSeconds(1.5)
-                    .back(10)
-                    .turn(Math.toRadians(210))
-                    .forward(5)
+                    .waitSeconds(3)
+                    .back(7)
                     .build();
+            /*
             TrajectorySequence traj4 = drive.trajectorySequenceBuilder(traj3.end())
                     .addTemporalMarker(()->{
                         rightLift.setPower(0.7);
@@ -102,11 +92,10 @@ public class autoLeftLow extends LinearOpMode {
             leftLift.setPower(0);
             drive.followTrajectorySequence(traj2);
             Claw.setPosition(0.3);
-          /*drive.followTrajectorySequence(traj2);// Start trajectory execution
+          drive.followTrajectorySequence(traj2);// Start trajectory execution
             drive.followTrajectorySequence(traj3);
-            drive.followTrajectorySequence(traj4);
 
-           */
+
 
 
 
