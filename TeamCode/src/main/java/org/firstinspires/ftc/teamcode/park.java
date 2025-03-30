@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
@@ -13,7 +14,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 public class park extends LinearOpMode {
     private DcMotor rightLift = null;
     private DcMotor leftLift = null;
-    private CRServo Claw = null;
+    private Servo Claw = null;
 
 
     @Override
@@ -22,7 +23,7 @@ public class park extends LinearOpMode {
         leftLift = hardwareMap.get(DcMotor.class,"leftLift");
 
 
-        Claw = hardwareMap.get(CRServo.class, "Claw");
+        Claw = hardwareMap.get(Servo.class, "Claw");
 
       /*  rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -52,7 +53,8 @@ public class park extends LinearOpMode {
         waitForStart();
         if(opModeIsActive()) {
             TrajectorySequence traj = drive.trajectorySequenceBuilder(new Pose2d())
-                    .forward(20)
+                    .forward(40)
+                    .strafeRight(7)
                     .build();
            /* TrajectorySequence traj2 = drive.trajectorySequenceBuilder(new Pose2d())
                     .lineToLinearHeading(new Pose2d(35,10))
