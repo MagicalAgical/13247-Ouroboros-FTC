@@ -1,11 +1,15 @@
 package org.firstinspires.ftc.teamcode;
 
+import androidx.appcompat.app.ActionBar;
+
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+
 import org.openftc.easyopencv.OpenCvPipeline;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
-
+@Disabled
 public class ColorDetectionPipeline extends OpenCvPipeline {
     private volatile boolean redDetected = false;
     private volatile boolean blueDetected = false;

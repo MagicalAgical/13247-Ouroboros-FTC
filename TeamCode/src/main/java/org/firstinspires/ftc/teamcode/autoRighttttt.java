@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -9,16 +8,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
-import org.opencv.core.Mat;
 
-import java.util.concurrent.CopyOnWriteArrayList;
-
-@Autonomous(name = "Auto Left Low", group = "Autonomous")
-public class autoLeftLow extends LinearOpMode {
+@Autonomous(name = "Auto Right Yeah", group = "Autonomous")
+public class autoRighttttt extends LinearOpMode {
     private DcMotor rightLift = null;
     private DcMotor leftLift = null;
     private Servo Claw = null;
@@ -41,71 +35,95 @@ public class autoLeftLow extends LinearOpMode {
         // light = hardwareMap.get(RevBlinkinLedDriver.class,"light");
 
 
-        telemetry.addLine("Ready for start Auto Left Low");
+        telemetry.addLine("Ready for start Auto Right Yeah");
         telemetry.update();
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        Claw.setPosition(0.99);
         //light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
         waitForStart();
         if (opModeIsActive()) {
             TrajectorySequence traj = drive.trajectorySequenceBuilder(new Pose2d())
-                    .strafeRight(2)
-                    .forward(9)
-                    .turn(Math.toRadians(-39))
-                    .strafeRight(3)
-                    .addTemporalMarker(()->{
-                        rightLift.setPower(0.85);
-                        leftLift.setPower(0.85);
+                   .addTemporalMarker(()->{
+                        rightLift.setPower(0.98);
+                        leftLift.setPower(0.98);
                     })
-                    .addTemporalMarker(0.85,()->{
+
+                    .lineToLinearHeading(new Pose2d(25,0.7,Math.toRadians(0)))
+                    .addTemporalMarker(1.47,()->{
                         rightLift.setPower(0);
                         leftLift.setPower(0);
                     })
-                    .waitSeconds(2.5)
-                    .build();
-
-           TrajectorySequence traj2 = drive.trajectorySequenceBuilder(traj.end())
-                   .forward(11)
-                    .build();
-
-
-            TrajectorySequence traj3 = drive.trajectorySequenceBuilder(traj2.end())
-                    .back(7)
-                    .turn(Math.toRadians(170))
-                    .addTemporalMarker(()->{
-                        rightLift.setPower(-0.6);
-                        leftLift.setPower(-0.6);
-                        hl.setPower(0.1);
+                    .addTemporalMarker(1.6,()->{
+                        rightLift.setPower(-0.45);
+                        leftLift.setPower(-0.45);
                     })
-                    .addTemporalMarker(1,()->{
+                    .addTemporalMarker(1.9,()->{
+                        rightLift.setPower(0);
+                        leftLift.setPower(0);
+                        Claw.setPosition(0.3);
+                    })
+                    .back(10)
+                    .build();
+
+            TrajectorySequence traj2 = drive.trajectorySequenceBuilder(new Pose2d())
+                    .addTemporalMarker(()->{
+                        rightLift.setPower(-0.315);
+                        leftLift.setPower(-0.315);
+                    })
+                    .lineToLinearHeading(new Pose2d(-13,-12.55242,Math.toRadians(0)))
+                    .addTemporalMarker(0.185,()->{
                         rightLift.setPower(0);
                         leftLift.setPower(0);
                     })
-                    .strafeRight(1.3)
-                    .forward(15)
+                    .turn(Math.toRadians(180))
+                    .forward(13.4)
                     .build();
-            /*
-            TrajectorySequence traj4 = drive.trajectorySequenceBuilder(traj3.end())
-                    .addTemporalMarker(()->{
+            TrajectorySequence traj3 = drive.trajectorySequenceBuilder(new Pose2d())
+                    .waitSeconds(1)
+                    .addTemporalMarker(1.2,()->{
                         rightLift.setPower(0.7);
                         leftLift.setPower(0.7);
+                    })
+                    .addTemporalMarker(1.6,()->{
+                        rightLift.setPower(0);
+                        leftLift.setPower(0);
+                    })
+                    .waitSeconds(0.2)
+                    .turn(Math.toRadians(180))
+                    .forward(10)
+                    .strafeLeft(23)
+                    .addTemporalMarker(()->{
+                        rightLift.setPower(0.61);
+                        leftLift.setPower(0.61);
                     })
                     .addTemporalMarker(2,()->{
                         rightLift.setPower(0);
                         leftLift.setPower(0);
                     })
-                    .forward(2)
-                            .build();
+                    .waitSeconds(2.5)
+                    .forward(17)
+                    .build();
 
-          */
+
+            TrajectorySequence traj4 = drive.trajectorySequenceBuilder(new Pose2d())
+                    .addTemporalMarker(()->{
+                        rightLift.setPower(-0.4);
+                        leftLift.setPower(-0.4);
+                    })
+                    .addTemporalMarker(0.27,()->{
+                        rightLift.setPower(0);
+                        leftLift.setPower(0);
+                        Claw.setPosition(0.3);
+                    })
+                    .waitSeconds(2)
+                    .back(2)
+                    .build();
+
+
             drive.followTrajectorySequence(traj);
-            rightLift.setPower(0);
-            leftLift.setPower(0);
             drive.followTrajectorySequence(traj2);
-            Claw.setPosition(0.3);// Start trajectory execution
+            Claw.setPosition(1);
             drive.followTrajectorySequence(traj3);
-
-
+            drive.followTrajectorySequence(traj4);
 
 
 

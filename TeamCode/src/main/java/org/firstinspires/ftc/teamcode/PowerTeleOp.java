@@ -21,8 +21,6 @@ public class PowerTeleOp extends LinearOpMode {
     private DcMotor rightLift = null;
     private DcMotor leftLift = null;
 
-    private CRServo intake = null;
-
     private CRServo hlLift = null;
 
     private Servo Claw = null;
@@ -30,8 +28,7 @@ public class PowerTeleOp extends LinearOpMode {
     private DcMotor hangRight = null;
     private DcMotor hangLeft = null;
 
-   private RevBlinkinLedDriver light;
-    private TouchSensor touch;
+    //private RevBlinkinLedDriver light;
     private DistanceSensor sensor;
     private boolean distanceMode = false;
 
@@ -63,12 +60,11 @@ public class PowerTeleOp extends LinearOpMode {
         hangRight = hardwareMap.get(DcMotor.class,"hangR");
 
         Claw = hardwareMap.get(Servo.class,"Claw");
-       // intake = hardwareMap.get(CRServo.class, "intake");
 
 
         hlLift = hardwareMap.get(CRServo.class, "hl");
 
-        light = hardwareMap.get(RevBlinkinLedDriver.class, "light");
+        //light = hardwareMap.get(RevBlinkinLedDriver.class, "light");
         sensor = hardwareMap.get(DistanceSensor.class, "sensor");
 
 
@@ -88,18 +84,6 @@ public class PowerTeleOp extends LinearOpMode {
         leftLower.setDirection(DcMotorSimple.Direction.FORWARD);
         leftUpper.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        /*
-        rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        leftLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-         */
 
         rightLift.setDirection((DcMotorSimple.Direction.REVERSE));
         leftLift.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -118,6 +102,7 @@ public class PowerTeleOp extends LinearOpMode {
         double highCham = 56;
         double highBasket = 819;
         double lowBasket = 85;
+        Claw.setPosition(0.3);
 
         while (opModeIsActive()) {
             double r = Math.hypot(-gamepad1.left_stick_x, gamepad1.left_stick_y);
@@ -140,9 +125,9 @@ public class PowerTeleOp extends LinearOpMode {
             if (gamepad1.a) {
                 speedAdjust = 1;
             }else if (gamepad1.x) {
-                speedAdjust = 0.75;
-            }else if(gamepad1.y){
                 speedAdjust = 0.5;
+            }else if(gamepad1.y){
+                speedAdjust = 0.25;
             }
 
 
@@ -163,10 +148,10 @@ public class PowerTeleOp extends LinearOpMode {
                 telemetry.addLine("Specimen Pickup");
             }
             if (distance >= target) {
-                light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+                //light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
                 telemetry.addData("Met desired distance", "Green");
             } else {
-                light.setPattern(RevBlinkinLedDriver.BlinkinPattern.AQUA);
+                //light.setPattern(RevBlinkinLedDriver.BlinkinPattern.AQUA);
                 telemetry.addData("Not at desired distance ", "Aqua");
             }
             telemetry.addData("Mode", "Outtake Actions");
@@ -178,7 +163,7 @@ public class PowerTeleOp extends LinearOpMode {
             if (gamepad2.dpad_up) {
                 motor_power = 0.9;
             } else if (gamepad2.dpad_down) {
-                motor_power = 0.48;
+                motor_power = 0.55;
             }
             telemetry.addData("Motor Power", motor_power);
 
@@ -232,11 +217,11 @@ public class PowerTeleOp extends LinearOpMode {
 
 
             if(gamepad1.right_trigger > 0.5){
-                hangRight.setPower(0.7);
-                hangLeft.setPower(0.7);
+                hangRight.setPower(0.9);
+                hangLeft.setPower(0.9);
             }else if (gamepad1.left_trigger > 0.5){
-                hangRight.setPower(-0.7);
-                hangLeft.setPower(-0.7);
+                hangRight.setPower(-0.8);
+                hangLeft.setPower(-0.8);
             }else {
                 hangRight.setPower(0);
                 hangLeft.setPower(0);
@@ -300,7 +285,7 @@ public class PowerTeleOp extends LinearOpMode {
         }
 
         if (isStopRequested()){
-            light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+            //light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
         }
     }
     public void raiseLift(int value){
