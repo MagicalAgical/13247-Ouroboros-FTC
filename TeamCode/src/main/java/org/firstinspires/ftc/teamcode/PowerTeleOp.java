@@ -21,8 +21,6 @@ public class PowerTeleOp extends LinearOpMode {
     private DcMotor rightLift = null;
     private DcMotor leftLift = null;
 
-    private CRServo intake = null;
-
     private CRServo hlLift = null;
 
     private Servo Claw = null;
@@ -30,8 +28,7 @@ public class PowerTeleOp extends LinearOpMode {
     private DcMotor hangRight = null;
     private DcMotor hangLeft = null;
 
-   private RevBlinkinLedDriver light;
-    private TouchSensor touch;
+    //private RevBlinkinLedDriver light;
     private DistanceSensor sensor;
     private boolean distanceMode = false;
 
@@ -63,12 +60,11 @@ public class PowerTeleOp extends LinearOpMode {
         hangRight = hardwareMap.get(DcMotor.class,"hangR");
 
         Claw = hardwareMap.get(Servo.class,"Claw");
-       // intake = hardwareMap.get(CRServo.class, "intake");
 
 
         hlLift = hardwareMap.get(CRServo.class, "hl");
 
-        light = hardwareMap.get(RevBlinkinLedDriver.class, "light");
+        //light = hardwareMap.get(RevBlinkinLedDriver.class, "light");
         sensor = hardwareMap.get(DistanceSensor.class, "sensor");
 
 
@@ -163,10 +159,10 @@ public class PowerTeleOp extends LinearOpMode {
                 telemetry.addLine("Specimen Pickup");
             }
             if (distance >= target) {
-                light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+                //light.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
                 telemetry.addData("Met desired distance", "Green");
             } else {
-                light.setPattern(RevBlinkinLedDriver.BlinkinPattern.AQUA);
+                //light.setPattern(RevBlinkinLedDriver.BlinkinPattern.AQUA);
                 telemetry.addData("Not at desired distance ", "Aqua");
             }
             telemetry.addData("Mode", "Outtake Actions");
@@ -300,7 +296,7 @@ public class PowerTeleOp extends LinearOpMode {
         }
 
         if (isStopRequested()){
-            light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+            //light.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
         }
     }
     public void raiseLift(int value){
