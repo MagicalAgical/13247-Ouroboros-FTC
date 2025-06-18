@@ -61,7 +61,7 @@ public class autoLeftLow extends LinearOpMode {
                         rightLift.setPower(0);
                         leftLift.setPower(0);
                     })
-                    .waitSeconds(2.5)
+                    .waitSeconds(2)
                     .build();
 
            TrajectorySequence traj2 = drive.trajectorySequenceBuilder(traj.end())
