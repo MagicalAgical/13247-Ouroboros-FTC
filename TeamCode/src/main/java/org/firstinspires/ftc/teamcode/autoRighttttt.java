@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuild
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Autonomous(name = "Auto Right", group = "Autonomous")
-public class autoRight extends LinearOpMode {
+public class autoRighttttt extends LinearOpMode {
     private DcMotor rightLift = null;
     private DcMotor leftLift = null;
     private Servo Claw = null;
