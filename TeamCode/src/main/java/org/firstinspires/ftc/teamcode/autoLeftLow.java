@@ -106,6 +106,7 @@ public class autoLeftLow extends LinearOpMode {
             drive.followTrajectorySequence(traj2);
             Claw.setPosition(0.3);// Start trajectory execution
             drive.followTrajectorySequence(traj3);
+            Claw.setPosition(0.9);
 
 
 

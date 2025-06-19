@@ -55,52 +55,6 @@ public class autoRightPush extends LinearOpMode {
                     .back(32)
                     .build();
 
-           /* TrajectorySequence traj2 = drive.trajectorySequenceBuilder(traj.end())
-                    .waitSeconds(1)
-                    .addTemporalMarker(()->{
-                        rightLift.setPower(0.8);
-                        leftLift.setPower(0.8);
-                    })
-                    .waitSeconds(1)
-                    .back(10)
-                    .turn(Math.toRadians(180))
-                    .strafeLeft(11)
-                    .addTemporalMarker(1.3,()->{
-                        rightLift.setPower(0);
-                        leftLift.setPower(0);
-                    })
-                    .addTemporalMarker(1.5,()->{
-                        rightLift.setPower(0.7);
-                        leftLift.setPower(0.7);
-                    })
-                    .addTemporalMarker(1.8,()->{
-                        rightLift.setPower(0);
-                        leftLift.setPower(0);
-                    })
-                    .build();
-
-            TrajectorySequence traj3 = drive.trajectorySequenceBuilder(traj2.end())
-                    .addTemporalMarker(()->{
-                        rightLift.setPower(0.9);
-                        leftLift.setPower(0.9);
-                    })
-                    .addTemporalMarker(1,()->{
-                        rightLift.setPower(0);
-                        leftLift.setPower(0);
-                    })
-                    .forward(10)
-                    .addTemporalMarker(1.3,()->{
-                        rightLift.setPower(-0.5);
-                        leftLift.setPower(-0.5);
-                    })
-                    .addTemporalMarker(1.45,()->{
-                        rightLift.setPower(0);
-                        leftLift.setPower(0);
-                    })
-                    .back(10)
-                    .build();
-
-            */
             drive.followTrajectorySequence(traj);
             //drive.followTrajectorySequence(traj2);
             //drive.followTrajectorySequence(traj3);

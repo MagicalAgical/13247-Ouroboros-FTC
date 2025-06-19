@@ -39,6 +39,7 @@ public class autoRighttttt extends LinearOpMode {
         telemetry.update();
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         //light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+        Claw.setPosition(0.99);
         waitForStart();
         if (opModeIsActive()) {
             TrajectorySequence traj = drive.trajectorySequenceBuilder(new Pose2d())
@@ -66,8 +67,8 @@ public class autoRighttttt extends LinearOpMode {
 
             TrajectorySequence traj2 = drive.trajectorySequenceBuilder(new Pose2d())
                     .addTemporalMarker(()->{
-                        rightLift.setPower(-0.315);
-                        leftLift.setPower(-0.315);
+                        rightLift.setPower(-0.3);
+                        leftLift.setPower(-0.3);
                     })
                     .lineToLinearHeading(new Pose2d(-13,-12.55242,Math.toRadians(0)))
                     .addTemporalMarker(0.185,()->{
@@ -75,7 +76,7 @@ public class autoRighttttt extends LinearOpMode {
                         leftLift.setPower(0);
                     })
                     .turn(Math.toRadians(180))
-                    .forward(13.4)
+                    .forward(13.3)
                     .build();
             TrajectorySequence traj3 = drive.trajectorySequenceBuilder(new Pose2d())
                     .waitSeconds(1)
@@ -92,14 +93,14 @@ public class autoRighttttt extends LinearOpMode {
                     .forward(10)
                     .strafeLeft(23)
                     .addTemporalMarker(()->{
-                        rightLift.setPower(0.61);
-                        leftLift.setPower(0.61);
+                        rightLift.setPower(0.55);
+                        leftLift.setPower(0.55);
                     })
-                    .addTemporalMarker(2,()->{
+                    .addTemporalMarker(1.8,()->{
                         rightLift.setPower(0);
                         leftLift.setPower(0);
                     })
-                    .waitSeconds(2.5)
+                    .waitSeconds(2.9)
                     .forward(17)
                     .build();
 

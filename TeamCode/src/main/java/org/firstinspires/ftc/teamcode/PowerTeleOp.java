@@ -163,7 +163,7 @@ public class PowerTeleOp extends LinearOpMode {
             if (gamepad2.dpad_up) {
                 motor_power = 0.9;
             } else if (gamepad2.dpad_down) {
-                motor_power = 0.55;
+                motor_power = 0.7;
             }
             telemetry.addData("Motor Power", motor_power);
 
@@ -217,11 +217,11 @@ public class PowerTeleOp extends LinearOpMode {
 
 
             if(gamepad1.right_trigger > 0.5){
-                hangRight.setPower(0.9);
-                hangLeft.setPower(0.9);
+                hangRight.setPower(1);
+                hangLeft.setPower(1);
             }else if (gamepad1.left_trigger > 0.5){
-                hangRight.setPower(-0.8);
-                hangLeft.setPower(-0.8);
+                hangRight.setPower(-1);
+                hangLeft.setPower(-1);
             }else {
                 hangRight.setPower(0);
                 hangLeft.setPower(0);
