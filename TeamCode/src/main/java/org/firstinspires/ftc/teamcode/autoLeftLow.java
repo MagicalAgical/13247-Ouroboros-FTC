@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -16,7 +17,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuild
 import org.opencv.core.Mat;
 
 import java.util.concurrent.CopyOnWriteArrayList;
-
+@Disabled
 @Autonomous(name = "Auto Left Low", group = "Autonomous")
 public class autoLeftLow extends LinearOpMode {
     private DcMotor rightLift = null;
@@ -26,6 +27,7 @@ public class autoLeftLow extends LinearOpMode {
     //private RevBlinkinLedDriver light;
 
     @Override
+
     public void runOpMode() throws InterruptedException {
         rightLift = hardwareMap.get(DcMotor.class, "rightLift");
         leftLift = hardwareMap.get(DcMotor.class, "leftLift");

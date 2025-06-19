@@ -23,7 +23,7 @@ def useProguard = false
 
 android {
 
-    compileSdkVersion 29
+    compileSdkVersion 29 //29
 
     signingConfigs {
         release {

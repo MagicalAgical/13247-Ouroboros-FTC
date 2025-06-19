@@ -3,12 +3,13 @@ package org.firstinspires.ftc.teamcode;
 import android.text.method.Touch;
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-
+@Disabled
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "LED Distance Sensor")
 public class servoTest extends OpMode {
 
