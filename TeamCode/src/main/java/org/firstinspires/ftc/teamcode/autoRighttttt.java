@@ -114,7 +114,7 @@ public class autoRighttttt extends LinearOpMode {
                         leftLift.setPower(0);
                         Claw.setPosition(0.3);
                     })
-                    .waitSeconds(2)
+                    .waitSeconds(2.1)
                     .back(2)
                     .build();
 
