@@ -17,13 +17,14 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuild
 import org.opencv.core.Mat;
 
 import java.util.concurrent.CopyOnWriteArrayList;
-@Disabled
 @Autonomous(name = "Auto Left Low", group = "Autonomous")
 public class autoLeftLow extends LinearOpMode {
     private DcMotor rightLift = null;
     private DcMotor leftLift = null;
     private Servo Claw = null;
     private CRServo hl = null;
+    private DcMotor hangRight = null;
+    private DcMotor hangLeft = null;
     //private RevBlinkinLedDriver light;
 
     @Override
@@ -40,6 +41,15 @@ public class autoLeftLow extends LinearOpMode {
         rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        hangLeft = hardwareMap.get(DcMotor.class,"hangL");
+        hangRight = hardwareMap.get(DcMotor.class,"hangR");
+
+        hangLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        hangRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        hangRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        hangLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+
         // light = hardwareMap.get(RevBlinkinLedDriver.class,"light");
 
 
@@ -53,25 +63,25 @@ public class autoLeftLow extends LinearOpMode {
             TrajectorySequence traj = drive.trajectorySequenceBuilder(new Pose2d())
                     .strafeRight(2)
                     .forward(9)
-                    .turn(Math.toRadians(-39))
+                    .turn(Math.toRadians(-40))
                     .strafeRight(3)
                     .addTemporalMarker(()->{
-                        rightLift.setPower(0.85);
-                        leftLift.setPower(0.85);
+                        rightLift.setPower(0.9);
+                        leftLift.setPower(0.9);
                     })
-                    .addTemporalMarker(0.85,()->{
+                    .addTemporalMarker(0.92,()->{
                         rightLift.setPower(0);
                         leftLift.setPower(0);
                     })
-                    .waitSeconds(2)
+                    .waitSeconds(1.7)
                     .build();
 
            TrajectorySequence traj2 = drive.trajectorySequenceBuilder(traj.end())
                    .forward(11)
-                    .build();
+                   .build();
 
 
-            TrajectorySequence traj3 = drive.trajectorySequenceBuilder(traj2.end())
+           TrajectorySequence traj3 = drive.trajectorySequenceBuilder(traj2.end())
                     .back(7)
                     .turn(Math.toRadians(170))
                     .addTemporalMarker(()->{
@@ -84,42 +94,51 @@ public class autoLeftLow extends LinearOpMode {
                         leftLift.setPower(0);
                     })
                     .strafeRight(1.3)
-                    .forward(15)
+                    //.forward(15)  // change if doing park auto
                     .build();
-            /*
-            TrajectorySequence traj4 = drive.trajectorySequenceBuilder(traj3.end())
-                    .addTemporalMarker(()->{
-                        rightLift.setPower(0.7);
-                        leftLift.setPower(0.7);
-                    })
-                    .addTemporalMarker(2,()->{
-                        rightLift.setPower(0);
-                        leftLift.setPower(0);
-                    })
-                    .forward(2)
-                            .build();
 
-          */
-            drive.followTrajectorySequence(traj);
-            rightLift.setPower(0);
-            leftLift.setPower(0);
-            drive.followTrajectorySequence(traj2);
-            Claw.setPosition(0.3);// Start trajectory execution
-            drive.followTrajectorySequence(traj3);
-            Claw.setPosition(0.9);
+           TrajectorySequence traj4 = drive.trajectorySequenceBuilder(traj3.end())
+                    .waitSeconds(1)
+                    .turn(Math.toRadians(195))
+                    .forward(9)
+                    .build();
 
+           TrajectorySequence park = drive.trajectorySequenceBuilder(new Pose2d())
+                   .strafeRight(3)
+                   .addTemporalMarker(()->{
+                       hangRight.setPower(1);
+                       hangLeft.setPower(1);
+                   })
+                   .turn(Math.toRadians(90))
+                   .forward(13)
+                   .addTemporalMarker(2,()->{
+                       hangLeft.setPower(0);
+                       hangRight.setPower(0);
+                   })
+                    .build();
 
 
+           drive.followTrajectorySequence(traj);
+           rightLift.setPower(0);
+           leftLift.setPower(0);
+           drive.followTrajectorySequence(traj2);
+           Claw.setPosition(0.3);
+           drive.followTrajectorySequence(traj3);
+           Claw.setPosition(0.9);
+           drive.followTrajectorySequence(park);
 
 
 
 
 
-            Pose2d finalPose = drive.getPoseEstimate(); // Final pose after trajectory execution
-            telemetry.addData("Final x", finalPose.getX());
-            telemetry.addData("Final y", finalPose.getY());
-            telemetry.addData("Final heading", finalPose.getHeading());
-            telemetry.update();
+
+
+
+           Pose2d finalPose = drive.getPoseEstimate();
+           telemetry.addData("Final x", finalPose.getX());
+           telemetry.addData("Final y", finalPose.getY());
+           telemetry.addData("Final heading", finalPose.getHeading());
+           telemetry.update();
         }
     }
 }

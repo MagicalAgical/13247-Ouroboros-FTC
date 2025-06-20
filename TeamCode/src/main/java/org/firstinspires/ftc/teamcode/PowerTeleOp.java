@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -11,7 +12,7 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp
+@TeleOp
 public class PowerTeleOp extends LinearOpMode {
     private DcMotor leftUpper = null;
     private DcMotor leftLower = null;
@@ -22,6 +23,8 @@ public class PowerTeleOp extends LinearOpMode {
     private DcMotor leftLift = null;
 
     private CRServo hlLift = null;
+    private CRServo right = null;
+    private CRServo left = null;
 
     private Servo Claw = null;
 
@@ -64,6 +67,10 @@ public class PowerTeleOp extends LinearOpMode {
 
         hlLift = hardwareMap.get(CRServo.class, "hl");
 
+        right = hardwareMap.get(CRServo.class,"right");
+        left = hardwareMap.get(CRServo.class,"left");
+
+
         //light = hardwareMap.get(RevBlinkinLedDriver.class, "light");
         sensor = hardwareMap.get(DistanceSensor.class, "sensor");
 
@@ -102,7 +109,6 @@ public class PowerTeleOp extends LinearOpMode {
         double highCham = 56;
         double highBasket = 819;
         double lowBasket = 85;
-        Claw.setPosition(0.3);
 
         while (opModeIsActive()) {
             double r = Math.hypot(-gamepad1.left_stick_x, gamepad1.left_stick_y);
@@ -161,9 +167,9 @@ public class PowerTeleOp extends LinearOpMode {
 
 
             if (gamepad2.dpad_up) {
-                motor_power = 0.9;
+                motor_power = 0.95;
             } else if (gamepad2.dpad_down) {
-                motor_power = 0.7;
+                motor_power = 0.65;
             }
             telemetry.addData("Motor Power", motor_power);
 
@@ -198,10 +204,10 @@ public class PowerTeleOp extends LinearOpMode {
             */
 
             if(gamepad2.right_bumper){
-                hlLift.setPower(1);
+                hlLift.setPower(0.9);
             }
             else if (gamepad2.left_bumper){
-                hlLift.setPower(-1);
+                hlLift.setPower(-0.9);
             }
             else{
                 hlLift.setPower(0);
@@ -225,6 +231,16 @@ public class PowerTeleOp extends LinearOpMode {
             }else {
                 hangRight.setPower(0);
                 hangLeft.setPower(0);
+            }
+
+            if(gamepad1.right_bumper){
+                //left control hub 1
+                //right control hub 2
+                right.setPower(0.3);
+                left.setPower(0.3);
+            }else if(gamepad1.left_bumper){
+                right.setPower(-0.3);
+                left.setPower(-0.3);
             }
 
 

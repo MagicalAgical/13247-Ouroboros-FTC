@@ -39,25 +39,25 @@ public class autoRighttttt extends LinearOpMode {
         telemetry.update();
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         //light.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
-        Claw.setPosition(0.99);
+        Claw.setPosition(1);
         waitForStart();
         if (opModeIsActive()) {
             TrajectorySequence traj = drive.trajectorySequenceBuilder(new Pose2d())
                     .addTemporalMarker(()->{
-                        rightLift.setPower(0.98);
-                        leftLift.setPower(0.98);
+                        rightLift.setPower(1);
+                        leftLift.setPower(1);
                     })
 
-                    .lineToLinearHeading(new Pose2d(25,0.7,Math.toRadians(0)))
-                    .addTemporalMarker(1.47,()->{
+                    .lineToLinearHeading(new Pose2d(25.5,0.7,Math.toRadians(0)))
+                    .addTemporalMarker(1.5,()->{
                         rightLift.setPower(0);
                         leftLift.setPower(0);
                     })
-                    .addTemporalMarker(1.6,()->{
+                    .addTemporalMarker(1.655,()->{
                         rightLift.setPower(-0.45);
                         leftLift.setPower(-0.45);
                     })
-                    .addTemporalMarker(1.9,()->{
+                    .addTemporalMarker(1.95,()->{
                         rightLift.setPower(0);
                         leftLift.setPower(0);
                         Claw.setPosition(0.3);
@@ -75,8 +75,8 @@ public class autoRighttttt extends LinearOpMode {
                         rightLift.setPower(0);
                         leftLift.setPower(0);
                     })
-                    .turn(Math.toRadians(180))
-                    .forward(13.3)
+                    .turn(Math.toRadians(195))
+                    .forward(14)
                     .build();
             TrajectorySequence traj3 = drive.trajectorySequenceBuilder(new Pose2d())
                     .waitSeconds(1)
@@ -100,7 +100,7 @@ public class autoRighttttt extends LinearOpMode {
                         rightLift.setPower(0);
                         leftLift.setPower(0);
                     })
-                    .waitSeconds(2.9)
+                    .waitSeconds(2.92)
                     .forward(17)
                     .build();
 
@@ -110,7 +110,7 @@ public class autoRighttttt extends LinearOpMode {
                         rightLift.setPower(-0.4);
                         leftLift.setPower(-0.4);
                     })
-                    .addTemporalMarker(0.27,()->{
+                    .addTemporalMarker(0.29,()->{
                         rightLift.setPower(0);
                         leftLift.setPower(0);
                         Claw.setPosition(0.3);
