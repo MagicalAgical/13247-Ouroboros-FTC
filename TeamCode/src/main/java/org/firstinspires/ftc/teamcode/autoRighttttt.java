@@ -44,20 +44,20 @@ public class autoRighttttt extends LinearOpMode {
         if (opModeIsActive()) {
             TrajectorySequence traj = drive.trajectorySequenceBuilder(new Pose2d())
                     .addTemporalMarker(()->{
-                        rightLift.setPower(1);
-                        leftLift.setPower(1);
+                        rightLift.setPower(0.972);
+                        leftLift.setPower(0.972);
                     })
 
                     .lineToLinearHeading(new Pose2d(25.5,0.7,Math.toRadians(0)))
-                    .addTemporalMarker(1.5,()->{
+                    .addTemporalMarker(1.55,()->{
                         rightLift.setPower(0);
                         leftLift.setPower(0);
                     })
-                    .addTemporalMarker(1.655,()->{
-                        rightLift.setPower(-0.45);
-                        leftLift.setPower(-0.45);
+                    .addTemporalMarker(1.73,()->{
+                        rightLift.setPower(-0.62);
+                        leftLift.setPower(-0.62);
                     })
-                    .addTemporalMarker(1.95,()->{
+                    .addTemporalMarker(1.98,()->{
                         rightLift.setPower(0);
                         leftLift.setPower(0);
                         Claw.setPosition(0.3);

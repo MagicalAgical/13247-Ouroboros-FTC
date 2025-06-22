@@ -63,13 +63,13 @@ public class autoLeftLow extends LinearOpMode {
             TrajectorySequence traj = drive.trajectorySequenceBuilder(new Pose2d())
                     .strafeRight(2)
                     .forward(9)
-                    .turn(Math.toRadians(-40))
-                    .strafeRight(3)
+                    .turn(Math.toRadians(-38))
+                    .strafeRight(2.85)
                     .addTemporalMarker(()->{
-                        rightLift.setPower(0.9);
-                        leftLift.setPower(0.9);
+                        rightLift.setPower(0.93);
+                        leftLift.setPower(0.93);
                     })
-                    .addTemporalMarker(0.92,()->{
+                    .addTemporalMarker(0.86,()->{
                         rightLift.setPower(0);
                         leftLift.setPower(0);
                     })
@@ -87,24 +87,28 @@ public class autoLeftLow extends LinearOpMode {
                     .addTemporalMarker(()->{
                         rightLift.setPower(-0.6);
                         leftLift.setPower(-0.6);
-                        hl.setPower(0.1);
+                        hl.setPower(0.08);
                     })
                     .addTemporalMarker(1,()->{
                         rightLift.setPower(0);
                         leftLift.setPower(0);
                     })
                     .strafeRight(1.3)
-                    //.forward(15)  // change if doing park auto
+                    .forward(19)  // change if doing park auto
                     .build();
 
            TrajectorySequence traj4 = drive.trajectorySequenceBuilder(traj3.end())
-                    .waitSeconds(1)
-                    .turn(Math.toRadians(195))
+                   .waitSeconds(1)
+                   .addTemporalMarker(1.2,()->{
+                       rightLift.setPower(0);
+                       leftLift.setPower(0);
+                   })
+                    .turn(Math.toRadians(-100))
                     .forward(9)
                     .build();
 
            TrajectorySequence park = drive.trajectorySequenceBuilder(new Pose2d())
-                   .strafeRight(3)
+                   .strafeRight(2.5)
                    .addTemporalMarker(()->{
                        hangRight.setPower(1);
                        hangLeft.setPower(1);
@@ -124,8 +128,10 @@ public class autoLeftLow extends LinearOpMode {
            drive.followTrajectorySequence(traj2);
            Claw.setPosition(0.3);
            drive.followTrajectorySequence(traj3);
-           Claw.setPosition(0.9);
-           drive.followTrajectorySequence(park);
+           Claw.setPosition(1);
+           rightLift.setPower(0.5);
+           leftLift.setPower(0.5);
+           drive.followTrajectorySequence(traj4);
 
 
 

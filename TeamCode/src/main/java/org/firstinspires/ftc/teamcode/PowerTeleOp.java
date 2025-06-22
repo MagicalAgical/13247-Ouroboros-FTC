@@ -23,8 +23,8 @@ public class PowerTeleOp extends LinearOpMode {
     private DcMotor leftLift = null;
 
     private CRServo hlLift = null;
-    private CRServo right = null;
-    private CRServo left = null;
+    private Servo right = null;
+    private Servo left = null;
 
     private Servo Claw = null;
 
@@ -67,8 +67,8 @@ public class PowerTeleOp extends LinearOpMode {
 
         hlLift = hardwareMap.get(CRServo.class, "hl");
 
-        right = hardwareMap.get(CRServo.class,"right");
-        left = hardwareMap.get(CRServo.class,"left");
+        right = hardwareMap.get(Servo.class,"right");
+        left = hardwareMap.get(Servo.class,"left");
 
 
         //light = hardwareMap.get(RevBlinkinLedDriver.class, "light");
@@ -167,7 +167,7 @@ public class PowerTeleOp extends LinearOpMode {
 
 
             if (gamepad2.dpad_up) {
-                motor_power = 0.95;
+                motor_power = 0.86;
             } else if (gamepad2.dpad_down) {
                 motor_power = 0.65;
             }
@@ -236,11 +236,11 @@ public class PowerTeleOp extends LinearOpMode {
             if(gamepad1.right_bumper){
                 //left control hub 1
                 //right control hub 2
-                right.setPower(0.3);
-                left.setPower(0.3);
+                right.setPosition(right.getPosition() - 0.05);
+                left.setPosition(left.getPosition() + 0.05);
             }else if(gamepad1.left_bumper){
-                right.setPower(-0.3);
-                left.setPower(-0.3);
+                right.setPosition(right.getPosition() + 0.05);
+                left.setPosition(left.getPosition() - 0.05);
             }
 
 
